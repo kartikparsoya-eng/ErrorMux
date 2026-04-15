@@ -380,12 +380,12 @@ if __name__ == "__main__":
 
 **Verification needed:** Exit code 148 for SIGTSTP is correct on Linux. On macOS (darwin), SIGTSTP=18, so exit code would be 146. The requirement specifies 148, suggesting Linux target. Planner should verify or handle both platforms.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Platform-specific exit codes**
+1. **Platform-specific exit codes** — RESOLVED
    - What we know: Exit codes for signals are `128 + signal_number`
-   - What's unclear: Signal numbers vary by platform (Linux vs macOS)
-   - Recommendation: Document expected behavior for both platforms, or use signal name detection
+   - What was unclear: Signal numbers vary by platform (Linux vs macOS)
+   - **Resolution:** Use exit code 148 (Linux SIGTSTP) per CAPT-05 requirement. Document in plugin that macOS users should add 146 to skip-list if needed. The plugin will support configurable skip-lists in Phase 4.
 
 ## Environment Availability
 

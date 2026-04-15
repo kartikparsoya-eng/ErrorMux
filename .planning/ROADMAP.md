@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Python project setup + stub CLI (Wave 1)
-- [ ] 01-02-PLAN.md — zsh plugin with hooks and widget (Wave 2)
+- [x] 01-01-PLAN.md — Python project setup + stub CLI (Wave 1)
+- [x] 01-02-PLAN.md — zsh plugin with hooks and widget (Wave 2)
 
 ### Phase 2: CLI + Ollama Core
 **Goal**: Users receive AI-powered explanations for failed commands

@@ -46,7 +46,11 @@ Plans:
   2. CLI calls Ollama localhost:11434 and receives structured WHY/FIX output
   3. Output streams to terminal with dim gray WHY and bold green FIX formatting via Rich
   4. On 10s timeout or failure, user sees "[explainer offline]" and CLI exits 0 gracefully
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Ollama client wrapper + response parsing (Wave 1)
+- [ ] 02-02-PLAN.md — CLI integration with temp files and Rich output (Wave 2)
 
 ### Phase 3: Cache System
 **Goal**: Repeated errors get instant explanations without LLM calls
@@ -98,8 +102,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Capture Layer | 0/2 | Ready to execute | - |
-| 2. CLI + Ollama Core | 0/TBD | Not started | - |
+| 1. Capture Layer | 2/2 | Complete | 2026-04-15 |
+| 2. CLI + Ollama Core | 0/2 | Ready to execute | - |
 | 3. Cache System | 0/TBD | Not started | - |
 | 4. Skip-List Filtering | 0/TBD | Not started | - |
 | 5. Installation | 0/TBD | Not started | - |

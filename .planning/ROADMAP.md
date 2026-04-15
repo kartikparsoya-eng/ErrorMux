@@ -12,8 +12,8 @@ ErrorMux delivers fast, local, on-demand error explanations for shell commands. 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Capture Layer** - zsh hooks capture command context for on-demand analysis
-- [ ] **Phase 2: CLI + Ollama Core** - Python CLI calls local LLM and streams formatted explanations
+- [x] **Phase 1: Capture Layer** - zsh hooks capture command context for on-demand analysis
+- [x] **Phase 2: CLI + Ollama Core** - Python CLI calls local LLM and streams formatted explanations
 - [ ] **Phase 3: Cache System** - SQLite cache delivers instant explanations for repeated errors
 - [ ] **Phase 4: Skip-List Filtering** - Filter out false-positive "errors" like grep exit 1
 - [ ] **Phase 5: Installation** - One-command setup with plugin, deps, and .zshrc integration
@@ -49,8 +49,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Ollama client wrapper + response parsing (Wave 1)
-- [ ] 02-02-PLAN.md — CLI integration with temp files and Rich output (Wave 2)
+- [x] 02-01-PLAN.md — Ollama client wrapper + response parsing (Wave 1)
+- [x] 02-02-PLAN.md — CLI integration with temp files and Rich output (Wave 2)
 
 ### Phase 3: Cache System
 **Goal**: Repeated errors get instant explanations without LLM calls
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Capture Layer | 2/2 | Complete | 2026-04-15 |
-| 2. CLI + Ollama Core | 0/2 | Ready to execute | - |
+| 2. CLI + Ollama Core | 2/2 | Complete | 2026-04-15 |
 | 3. Cache System | 0/TBD | Not started | - |
 | 4. Skip-List Filtering | 0/TBD | Not started | - |
 | 5. Installation | 0/TBD | Not started | - |

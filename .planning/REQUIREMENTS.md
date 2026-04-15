@@ -15,12 +15,12 @@
 
 ### CLI Core
 
-- [ ] **CLI-01**: Read three tmp files (cmd, stderr, exit code)
+- [x] **CLI-01**: Read three tmp files (cmd, stderr, exit code)
 - [ ] **CLI-02**: SHA256(cmd+stderr) → SQLite cache at ~/.shell-explainer/cache.db
 - [ ] **CLI-03**: Return cached explanation instantly on cache hit
-- [ ] **CLI-04**: On miss: POST to Ollama /api/generate with structured prompt
-- [ ] **CLI-05**: Stream output to stdout with Rich (dim gray WHY, bold green FIX)
-- [ ] **CLI-06**: 10s timeout; on failure print "[explainer offline]" and exit 0
+- [x] **CLI-04**: On miss: POST to Ollama /api/generate with structured prompt
+- [x] **CLI-05**: Stream output to stdout with Rich (dim gray WHY, bold green FIX)
+- [x] **CLI-06**: 10s timeout; on failure print "[explainer offline]" and exit 0
 
 ### Skip-List
 
@@ -79,12 +79,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CAPT-03 | Phase 1 | Pending |
 | CAPT-04 | Phase 1 | Pending |
 | CAPT-05 | Phase 1 | Pending |
-| CLI-01 | Phase 2 | Pending |
+| CLI-01 | Phase 2 | Complete |
 | CLI-02 | Phase 3 | Pending |
 | CLI-03 | Phase 3 | Pending |
-| CLI-04 | Phase 2 | Pending |
-| CLI-05 | Phase 2 | Pending |
-| CLI-06 | Phase 2 | Pending |
+| CLI-04 | Phase 2 | Complete |
+| CLI-05 | Phase 2 | Complete |
+| CLI-06 | Phase 2 | Complete |
 | SKIP-01 | Phase 4 | Pending |
 | SKIP-02 | Phase 4 | Pending |
 | SKIP-03 | Phase 4 | Pending |

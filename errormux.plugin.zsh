@@ -79,7 +79,7 @@ _errormux_explain() {
     
     # CAPT-04: Invoke Python CLI (stub in Phase 1)
     # Real implementation with Ollama integration comes in Phase 2
-    errormux explain
+    errormux
 }
 
 # ==============================================================================

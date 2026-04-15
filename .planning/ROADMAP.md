@@ -72,7 +72,11 @@ Plans:
   2. test/[[ exit 1 (condition false, not error) doesn't trigger explanation
   3. diff exit 1 (files differ, not error) doesn't trigger explanation
   4. Users can configure additional skip patterns in ~/.shell-explainer/config.toml
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Skip module: built-in defaults + TOML config loader + should_skip predicate (Wave 1)
+- [ ] 04-02-PLAN.md — CLI integration: wire skip check before cache/LLM, add --force flag, dim notice UX (Wave 2)
 
 ### Phase 5: Installation
 **Goal**: Users can install ErrorMux with a single command
@@ -105,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Capture Layer | 2/2 | Complete | 2026-04-15 |
 | 2. CLI + Ollama Core | 2/2 | Complete | 2026-04-15 |
 | 3. Cache System | 2/2 | Complete    | 2026-04-15 |
-| 4. Skip-List Filtering | 0/TBD | Not started | - |
+| 4. Skip-List Filtering | 0/2 | Not started | - |
 | 5. Installation | 0/TBD | Not started | - |
 | 6. Testing | 0/TBD | Not started | - |
 

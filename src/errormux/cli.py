@@ -9,6 +9,7 @@ from errormux.cache import cache_get, cache_set, make_cache_key
 from errormux.client import chat_with_ollama
 from errormux.parser import ParseError, parse_response
 from errormux.prompts import SYSTEM_PROMPT, build_user_prompt
+from errormux.skip import extract_command_name, should_skip
 
 app = typer.Typer(
     name="errormux",
@@ -37,7 +38,14 @@ def read_context() -> tuple[str, str, int]:
 
 
 @app.command()
-def explain() -> None:
+def explain(
+    force: bool = typer.Option(
+        False,
+        "--force",
+        "-f",
+        help="Bypass skip list and force LLM explanation",
+    ),
+) -> None:
     """Explain the last failed command.
 
     Reads captured command context from temp files, calls Ollama for
@@ -50,6 +58,16 @@ def explain() -> None:
     except FileNotFoundError:
         console.print("[errormux] No command captured")
         return
+
+    # Skip check BEFORE cache_get / LLM (D-03, D-04, D-10). Bypassed via --force (D-11).
+    if not force:
+        cmd_name = extract_command_name(cmd)
+        if should_skip(cmd_name, exit_code):
+            console.print(
+                f"not an error ({cmd_name} exit {exit_code}) — nothing to explain",
+                style="dim",
+            )
+            return
 
     cache_key = make_cache_key(cmd, stderr)
     cached_response = cache_get(cache_key)

@@ -16,7 +16,6 @@ app = typer.Typer(
     help="On-demand shell command error explanations",
 )
 
-# Temp file paths (written by Phase 1 zsh plugin)
 TEMP_CMD = Path("/tmp/shell-explainer-last-cmd")
 TEMP_STDERR = Path("/tmp/shell-explainer-last-stderr")
 TEMP_EXIT = Path("/tmp/shell-explainer-last-exit")
@@ -56,10 +55,9 @@ def explain(
     try:
         cmd, stderr, exit_code = read_context()
     except FileNotFoundError:
-        console.print("[errormux] No command captured")
+        console.print("[errormux] No command captured", markup=False)
         return
 
-    # Skip check BEFORE cache_get / LLM (D-03, D-04, D-10). Bypassed via --force (D-11).
     if not force:
         cmd_name = extract_command_name(cmd)
         if should_skip(cmd_name, exit_code):
@@ -96,9 +94,9 @@ def explain(
             console.print(response)
 
     except TimeoutError:
-        console.print("[explainer offline]")
+        console.print("[explainer offline]", markup=False)
     except ConnectionError:
-        console.print("[explainer offline]")
+        console.print("[explainer offline]", markup=False)
 
 
 if __name__ == "__main__":

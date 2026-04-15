@@ -83,10 +83,14 @@ Plans:
 **Depends on**: Phase 4
 **Requirements**: INST-01, INST-02, INST-03
 **Success Criteria** (what must be TRUE):
-  1. Running install.sh copies plugin to ~/.config/shell-explainer/
+  1. Running install.sh clones repo to ~/.shell-explainer/
   2. .zshrc is updated with source line if missing (no duplicate entries)
-  3. Python dependencies (httpx, typer, rich) are installed via uv automatically
-**Plans**: TBD
+  3. Python dependencies (typer, rich, ollama) are installed via uv sync
+**Plans**: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Create install.sh with clone, .zshrc modification, and uv sync (Wave 1)
+- [ ] 05-02-PLAN.md — Verify end-to-end installation flow (Wave 2)
 
 ### Phase 6: Testing
 **Goal**: All components are verified with automated tests
@@ -108,9 +112,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Capture Layer | 2/2 | Complete | 2026-04-15 |
 | 2. CLI + Ollama Core | 2/2 | Complete | 2026-04-15 |
-| 3. Cache System | 2/2 | Complete    | 2026-04-15 |
+| 3. Cache System | 2/2 | Complete | 2026-04-15 |
 | 4. Skip-List Filtering | 2/2 | Complete | 2026-04-15 |
-| 5. Installation | 0/TBD | Not started | - |
+| 5. Installation | 0/2 | Ready to execute | - |
 | 6. Testing | 0/TBD | Not started | - |
 
 ---

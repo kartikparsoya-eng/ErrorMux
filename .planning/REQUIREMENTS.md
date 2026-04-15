@@ -31,9 +31,9 @@
 
 ### Installation
 
-- [ ] **INST-01**: install.sh copies plugin to ~/.config/shell-explainer/
-- [ ] **INST-02**: install.sh appends source line to .zshrc if missing
-- [ ] **INST-03**: install.sh installs Python deps via uv
+- [x] **INST-01**: install.sh copies plugin to ~/.config/shell-explainer/
+- [x] **INST-02**: install.sh appends source line to .zshrc if missing
+- [x] **INST-03**: install.sh installs Python deps via uv
 
 ### Testing
 
@@ -89,9 +89,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SKIP-02 | Phase 4 | Complete |
 | SKIP-03 | Phase 4 | Complete |
 | SKIP-04 | Phase 4 | Complete |
-| INST-01 | Phase 5 | Pending |
-| INST-02 | Phase 5 | Pending |
-| INST-03 | Phase 5 | Pending |
+| INST-01 | Phase 5 | Complete |
+| INST-02 | Phase 5 | Complete |
+| INST-03 | Phase 5 | Complete |
 | TEST-01 | Phase 6 | Pending |
 | TEST-02 | Phase 6 | Pending |
 | TEST-03 | Phase 6 | Pending |

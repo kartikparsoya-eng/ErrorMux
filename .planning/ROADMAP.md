@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Capture Layer** - zsh hooks capture command context for on-demand analysis
 - [x] **Phase 2: CLI + Ollama Core** - Python CLI calls local LLM and streams formatted explanations
 - [x] **Phase 3: Cache System** - SQLite cache delivers instant explanations for repeated errors (completed 2026-04-15)
-- [ ] **Phase 4: Skip-List Filtering** - Filter out false-positive "errors" like grep exit 1
+- [x] **Phase 4: Skip-List Filtering** - Filter out false-positive "errors" like grep exit 1 (completed 2026-04-15)
 - [ ] **Phase 5: Installation** - One-command setup with plugin, deps, and .zshrc integration
 - [ ] **Phase 6: Testing** - pytest coverage for cache, skip-list, and prompt construction
 
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Capture Layer | 2/2 | Complete | 2026-04-15 |
 | 2. CLI + Ollama Core | 2/2 | Complete | 2026-04-15 |
 | 3. Cache System | 2/2 | Complete    | 2026-04-15 |
-| 4. Skip-List Filtering | 0/2 | Not started | - |
+| 4. Skip-List Filtering | 2/2 | Complete | 2026-04-15 |
 | 5. Installation | 0/TBD | Not started | - |
 | 6. Testing | 0/TBD | Not started | - |
 

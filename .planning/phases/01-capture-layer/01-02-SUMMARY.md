@@ -65,7 +65,7 @@ completed: 2026-04-15
 - preexec hook captures command text to /tmp/shell-explainer-last-cmd
 - preexec hook sets up stderr tee redirect to /tmp/shell-explainer-last-stderr
 - precmd hook captures exit code to /tmp/shell-explainer-last-exit
-- `??` zle widget invokes `errormux explain` CLI
+- `??` zle widget invokes `errormux` CLI (gap fix: changed from `errormux explain`)
 - Skip logic for exit codes 0 (success), 130 (SIGINT), 148 (SIGTSTP)
 
 ## Task Commits

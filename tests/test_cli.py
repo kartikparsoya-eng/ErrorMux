@@ -6,7 +6,21 @@ from pathlib import Path
 import tempfile
 import os
 
-from errormux.cli import explain, read_context
+from typer.testing import CliRunner
+
+from errormux.cli import app, explain, read_context
+
+
+class TestForceFlag:
+    """Tests for --force/-f flag presence."""
+
+    def test_force_flag_in_help(self):
+        """explain command advertises --force and -f in help output."""
+        runner = CliRunner()
+        result = runner.invoke(app, ["explain", "--help"])
+        assert result.exit_code == 0
+        assert "--force" in result.output
+        assert "-f" in result.output
 
 
 class TestReadContext:

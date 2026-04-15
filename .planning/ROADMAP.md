@@ -90,7 +90,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Create install.sh with clone, .zshrc modification, and uv sync (Wave 1)
-- [ ] 05-02-PLAN.md — Verify end-to-end installation flow (Wave 2)
+- [x] 05-02-PLAN.md — Verify end-to-end installation flow (Wave 2)
 
 ### Phase 6: Testing
 **Goal**: All components are verified with automated tests

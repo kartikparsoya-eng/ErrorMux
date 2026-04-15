@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 Phase: 4
 Plan: Not started
 Status: Ready to execute
-Last activity: 2026-04-15
+Last activity: 2026-04-15 - Completed quick task 260415-q0k: Fix offline graceful degradation blocker
 
 Progress: [██████░░░░] 67%
 
@@ -77,6 +77,12 @@ None yet.
 ### Blockers/Concerns
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260415-q0k | Fix offline graceful degradation - add ConnectError handler | 2026-04-15 | d714dd7 | [260415-q0k-fix-offline-graceful-degradation-blocker](./quick/260415-q0k-fix-offline-graceful-degradation-blocker/) |
 
 ## Session Continuity
 

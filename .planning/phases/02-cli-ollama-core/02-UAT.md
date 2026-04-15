@@ -1,14 +1,14 @@
 ---
-status: partial
+status: complete
 phase: 02-cli-ollama-core
 source: [02-01-SUMMARY.md, 02-02-SUMMARY.md]
 started: 2026-04-15T12:15:00Z
-updated: 2026-04-15T12:25:00Z
+updated: 2026-04-15T12:30:00Z
 ---
 
 ## Current Test
 
-[testing complete - 1 blocker issue found]
+[testing complete]
 
 ## Tests
 
@@ -36,18 +36,8 @@ reason: Ollama service not running at localhost:11434
 
 ### 5. Offline Graceful Degradation
 expected: When Ollama is unavailable, CLI prints "[explainer offline]" and exits 0
-result: issue
-reported: "CLI crashes with full traceback (httpx.ConnectError) instead of graceful '[explainer offline]' message"
-severity: blocker
-root_cause: client.py catches ollama.ResponseError but not httpx.ConnectError which is raised before ResponseError wrapper
-
-### 4. Ollama Online Check
-expected: Ollama service running at localhost:11434 responds to API calls
-result: pending
-
-### 5. Offline Graceful Degradation
-expected: When Ollama is unavailable, CLI prints "[explainer offline]" and exits 0
-result: pending
+result: pass
+note: Fixed - added ConnectError handling in client.py, markup=False in cli.py
 
 ### 6. WHY Output Style
 expected: WHY text is printed in dim gray style
@@ -74,20 +64,12 @@ note: Covered by automated tests (test_parser.py)
 ## Summary
 
 total: 9
-passed: 4
-issues: 1
+passed: 5
+issues: 0
 pending: 0
 skipped: 0
 blocked: 4
 
 ## Gaps
 
-- truth: "CLI prints '[explainer offline]' and exits 0 when Ollama is unavailable"
-  status: failed
-  reason: "CLI crashes with httpx.ConnectError traceback instead of graceful degradation"
-  severity: blocker
-  test: 5
-  root_cause: "client.py catches ollama.ResponseError but not httpx.ConnectError"
-  artifacts: []
-  missing:
-    - "Add httpx.ConnectError exception handling in client.py"
+[none - all testable items passed]

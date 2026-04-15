@@ -24,10 +24,10 @@
 
 ### Skip-List
 
-- [ ] **SKIP-01**: Filter out grep exit 1 (no match, not error)
-- [ ] **SKIP-02**: Filter out test/[[ exit 1 (condition false, not error)
-- [ ] **SKIP-03**: Filter out diff exit 1 (files differ, not error)
-- [ ] **SKIP-04**: Configurable patterns in ~/.shell-explainer/config.toml
+- [x] **SKIP-01**: Filter out grep exit 1 (no match, not error)
+- [x] **SKIP-02**: Filter out test/[[ exit 1 (condition false, not error)
+- [x] **SKIP-03**: Filter out diff exit 1 (files differ, not error)
+- [x] **SKIP-04**: Configurable patterns in ~/.shell-explainer/config.toml
 
 ### Installation
 
@@ -85,10 +85,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLI-04 | Phase 2 | Complete |
 | CLI-05 | Phase 2 | Complete |
 | CLI-06 | Phase 2 | Complete |
-| SKIP-01 | Phase 4 | Pending |
-| SKIP-02 | Phase 4 | Pending |
-| SKIP-03 | Phase 4 | Pending |
-| SKIP-04 | Phase 4 | Pending |
+| SKIP-01 | Phase 4 | Complete |
+| SKIP-02 | Phase 4 | Complete |
+| SKIP-03 | Phase 4 | Complete |
+| SKIP-04 | Phase 4 | Complete |
 | INST-01 | Phase 5 | Pending |
 | INST-02 | Phase 5 | Pending |
 | INST-03 | Phase 5 | Pending |

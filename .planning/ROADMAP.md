@@ -75,8 +75,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Skip module: built-in defaults + TOML config loader + should_skip predicate (Wave 1)
-- [ ] 04-02-PLAN.md — CLI integration: wire skip check before cache/LLM, add --force flag, dim notice UX (Wave 2)
+- [x] 04-01-PLAN.md — Skip module: built-in defaults + TOML config loader + should_skip predicate (Wave 1)
+- [x] 04-02-PLAN.md — CLI integration: wire skip check before cache/LLM, add --force flag, dim notice UX (Wave 2)
 
 ### Phase 5: Installation
 **Goal**: Users can install ErrorMux with a single command

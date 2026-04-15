@@ -224,3 +224,91 @@ class TestExplain:
                                 mock_console.print.assert_called()
                                 calls_str = str(mock_console.print.call_args_list)
                                 assert "[explainer offline]" in calls_str
+
+
+class TestSkipIntegration:
+    """Tests for skip-list short-circuit behavior in explain() (SKIP-01..04, D-03/D-04/D-10/D-11)."""
+
+    def _setup(self, tmpdir, cmd_text, stderr_text, exit_text):
+        cmd_file = Path(tmpdir) / "shell-explainer-last-cmd"
+        stderr_file = Path(tmpdir) / "shell-explainer-last-stderr"
+        exit_file = Path(tmpdir) / "shell-explainer-last-exit"
+        cmd_file.write_text(cmd_text)
+        stderr_file.write_text(stderr_text)
+        exit_file.write_text(exit_text)
+        return cmd_file, stderr_file, exit_file
+
+    def _run_explain(self, cmd_text, stderr_text, exit_text, force=False):
+        """Invoke explain() with patched temp files and mocks."""
+        mock_console = MagicMock()
+        mock_chat = MagicMock(return_value="WHY: x\nFIX: y")
+        mock_cache_set = MagicMock()
+        mock_cache_get = MagicMock(return_value=None)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cmd_file, stderr_file, exit_file = self._setup(
+                tmpdir, cmd_text, stderr_text, exit_text
+            )
+            with patch("errormux.cli.TEMP_CMD", cmd_file), \
+                 patch("errormux.cli.TEMP_STDERR", stderr_file), \
+                 patch("errormux.cli.TEMP_EXIT", exit_file), \
+                 patch("errormux.cli.Console", return_value=mock_console), \
+                 patch("errormux.cli.chat_with_ollama", mock_chat), \
+                 patch("errormux.cli.cache_set", mock_cache_set), \
+                 patch("errormux.cli.cache_get", mock_cache_get):
+                explain(force=force)
+        return mock_console, mock_chat, mock_cache_set, mock_cache_get
+
+    def test_explain_skips_grep_exit_1(self):
+        """grep exit 1 short-circuits: dim notice, no LLM, no cache_set (SKIP-01)."""
+        console, chat, cache_set_m, _ = self._run_explain("grep foo file", "", "1")
+        chat.assert_not_called()
+        cache_set_m.assert_not_called()
+        calls_str = str(console.print.call_args_list)
+        assert "grep" in calls_str
+        assert "exit 1" in calls_str
+        notice_calls = [
+            c for c in console.print.call_args_list
+            if "nothing to explain" in str(c)
+        ]
+        assert len(notice_calls) == 1
+        assert notice_calls[0].kwargs.get("style") == "dim"
+
+    def test_explain_skips_diff_exit_1(self):
+        """diff exit 1 short-circuits (SKIP-03)."""
+        console, chat, cache_set_m, _ = self._run_explain("diff a b", "", "1")
+        chat.assert_not_called()
+        cache_set_m.assert_not_called()
+        assert "diff" in str(console.print.call_args_list)
+
+    def test_explain_skips_test_exit_1(self):
+        """test exit 1 short-circuits (SKIP-02)."""
+        console, chat, cache_set_m, _ = self._run_explain("test -f x", "", "1")
+        chat.assert_not_called()
+        cache_set_m.assert_not_called()
+        assert "test" in str(console.print.call_args_list)
+
+    def test_explain_force_bypasses_skip(self):
+        """--force bypasses skip list; normal flow runs (D-11)."""
+        _, chat, cache_set_m, cache_get_m = self._run_explain(
+            "grep foo file", "", "1", force=True
+        )
+        chat.assert_called_once()
+        cache_get_m.assert_called_once()
+        cache_set_m.assert_called_once()
+
+    def test_explain_real_error_not_skipped(self):
+        """grep exit 2 (real error) is not skipped; normal flow runs."""
+        _, chat, cache_set_m, cache_get_m = self._run_explain(
+            "grep foo file", "grep: file: No such file or directory", "2"
+        )
+        chat.assert_called_once()
+        cache_get_m.assert_called_once()
+        cache_set_m.assert_called_once()
+
+    def test_skip_notice_format(self):
+        """Skip notice contains 'not an error' and 'nothing to explain'."""
+        console, _, _, _ = self._run_explain("grep foo file", "", "1")
+        calls_str = str(console.print.call_args_list)
+        assert "not an error" in calls_str
+        assert "nothing to explain" in calls_str

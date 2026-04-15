@@ -1,6 +1,6 @@
 """Ollama client wrapper with streaming and error handling."""
 
-from httpx import TimeoutException
+from httpx import ConnectError, TimeoutException
 
 import ollama
 
@@ -43,6 +43,10 @@ def chat_with_ollama(system_prompt: str, user_prompt: str) -> str:
     except TimeoutException as e:
         # Re-raise as TimeoutError for cleaner interface
         raise TimeoutError(f"Ollama request timed out: {e}") from e
+
+    except ConnectError as e:
+        # Re-raise as ConnectionError for service-down scenarios
+        raise ConnectionError("Ollama service unavailable") from e
 
     except ollama.ResponseError as e:
         # Re-raise as ConnectionError for service-down scenarios

@@ -74,12 +74,33 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Populated during roadmap creation) | | |
+| CAPT-01 | Phase 1 | Pending |
+| CAPT-02 | Phase 1 | Pending |
+| CAPT-03 | Phase 1 | Pending |
+| CAPT-04 | Phase 1 | Pending |
+| CAPT-05 | Phase 1 | Pending |
+| CLI-01 | Phase 2 | Pending |
+| CLI-02 | Phase 3 | Pending |
+| CLI-03 | Phase 3 | Pending |
+| CLI-04 | Phase 2 | Pending |
+| CLI-05 | Phase 2 | Pending |
+| CLI-06 | Phase 2 | Pending |
+| SKIP-01 | Phase 4 | Pending |
+| SKIP-02 | Phase 4 | Pending |
+| SKIP-03 | Phase 4 | Pending |
+| SKIP-04 | Phase 4 | Pending |
+| INST-01 | Phase 5 | Pending |
+| INST-02 | Phase 5 | Pending |
+| INST-03 | Phase 5 | Pending |
+| TEST-01 | Phase 6 | Pending |
+| TEST-02 | Phase 6 | Pending |
+| TEST-03 | Phase 6 | Pending |
+| TEST-04 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15 ⚠️
+- v1 requirements: 22 total
+- Mapped to phases: 22
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-15*

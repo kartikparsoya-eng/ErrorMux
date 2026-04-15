@@ -25,3 +25,18 @@ dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
 ]
+
+[tool.pytest.ini_options]
+addopts = "-v --cov=errormux --cov-fail-under=80 --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src/errormux"]
+branch = false
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]

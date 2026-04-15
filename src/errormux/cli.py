@@ -5,6 +5,7 @@ from pathlib import Path
 from rich.console import Console
 import typer
 
+from errormux.cache import cache_get, cache_set, make_cache_key
 from errormux.client import chat_with_ollama
 from errormux.parser import ParseError, parse_response
 from errormux.prompts import SYSTEM_PROMPT, build_user_prompt
@@ -44,32 +45,41 @@ def explain() -> None:
     """
     console = Console()
 
-    # Read captured context from temp files
     try:
         cmd, stderr, exit_code = read_context()
     except FileNotFoundError:
         console.print("[errormux] No command captured")
         return
 
-    # Call Ollama for explanation
+    cache_key = make_cache_key(cmd, stderr)
+    cached_response = cache_get(cache_key)
+
+    if cached_response:
+        lines = cached_response.split("\n")
+        for line in lines:
+            if line.startswith("WHY:"):
+                console.print(line, style="dim")
+            elif line.startswith("FIX:"):
+                console.print(line, style="bold green")
+            else:
+                console.print(line)
+        return
+
     try:
         user_prompt = build_user_prompt(cmd, stderr, exit_code)
         response = chat_with_ollama(SYSTEM_PROMPT, user_prompt)
 
-        # Parse WHY/FIX from response
         try:
             why, fix = parse_response(response)
             console.print(f"WHY: {why}", style="dim")
             console.print(f"FIX: {fix}", style="bold green")
+            cache_set(cache_key, f"WHY: {why}\nFIX: {fix}")
         except ParseError:
-            # D-10: Print raw output if unparseable
             console.print(response)
 
     except TimeoutError:
-        # D-08: Graceful degradation on timeout
         console.print("[explainer offline]")
     except ConnectionError:
-        # D-08: Graceful degradation on service down
         console.print("[explainer offline]")
 
 

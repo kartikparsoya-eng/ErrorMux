@@ -31,7 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Exit code is recorded to /tmp/shell-explainer-last-exit after each command completes
   4. User can trigger `??` widget which reads temp files and invokes Python CLI
   5. Exit codes 0, 130, and 148 are skipped (no explanation triggered)
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Python project setup + stub CLI (Wave 1)
+- [ ] 01-02-PLAN.md — zsh plugin with hooks and widget (Wave 2)
 
 ### Phase 2: CLI + Ollama Core
 **Goal**: Users receive AI-powered explanations for failed commands
@@ -94,7 +98,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Capture Layer | 0/TBD | Not started | - |
+| 1. Capture Layer | 0/2 | Ready to execute | - |
 | 2. CLI + Ollama Core | 0/TBD | Not started | - |
 | 3. Cache System | 0/TBD | Not started | - |
 | 4. Skip-List Filtering | 0/TBD | Not started | - |

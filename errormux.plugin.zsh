@@ -11,9 +11,6 @@
 # Global State
 # ==============================================================================
 
-# Resolve plugin directory (works for Oh My Zsh and manual installs)
-_ERRORMUX_PLUGIN_DIR="${0:A:h}"
-
 _ERRORMUX_LAST_CMD=""
 _ERRORMUX_LAST_EXIT=0
 _ERRORMUX_LAST_STDERR=""
@@ -81,7 +78,15 @@ _errormux_explain() {
     fi
 
     # CAPT-04: Invoke Python CLI via uv
-    uv run --directory "$_ERRORMUX_PLUGIN_DIR" errormux
+    # Detect plugin directory: Oh My Zsh or manual install
+    local plugin_dir
+    if [[ -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/errormux" ]]; then
+        plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/errormux"
+    else
+        plugin_dir="$HOME/.shell-explainer"
+    fi
+
+    uv run --directory "$plugin_dir" errormux
 
     # WUX-01, WUX-02: Reset prompt after CLI completes
     # D-01, D-02: redraws the prompt line cleanly

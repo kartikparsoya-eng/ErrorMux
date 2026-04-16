@@ -36,7 +36,7 @@ source ~/.zshrc
 ### Option 2: One-Line Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/master/install.sh | bash
 ```
 
 This script:
@@ -87,7 +87,7 @@ Re-run the install command:
 cd ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/errormux && git pull
 
 # One-line
-curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/master/install.sh | bash
 
 # Manual
 cd ~/.shell-explainer && git pull
@@ -96,7 +96,7 @@ cd ~/.shell-explainer && git pull
 ## Uninstalling
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/main/uninstall.sh | bash
+curl -sSL https://raw.githubusercontent.com/kartikparsoya-eng/ErrorMux/master/uninstall.sh | bash
 ```
 
 Then remove the plugin from your `.zshrc`:

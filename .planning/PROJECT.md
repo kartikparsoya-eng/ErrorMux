@@ -22,7 +22,22 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 
 ### Active
 
-(None — plan next milestone)
+- [ ] Fix ?? widget to auto-return to prompt after showing output
+- [ ] Switch Ollama model from gemma3:4b to gemma4:e2b
+- [ ] Package for multiple install methods (git clone, Oh My Zsh, manual)
+- [ ] Polish repo: README with usage docs, demo gif, LICENSE, test badges
+- [ ] Push to github.com/kartikparsoya-eng/ErrorMux
+
+## Current Milestone: v1.1 Polish & Package
+
+**Goal:** Fix UX issues, switch to Gemma 4, package for public distribution, and publish to GitHub.
+
+**Target features:**
+- Fix ?? widget to auto-return to prompt after showing output
+- Switch Ollama model from gemma3:4b to gemma4:e2b
+- Package for multiple install methods (git clone, Oh My Zsh, manual)
+- Polish repo: README with usage docs, demo gif, LICENSE, test badges
+- Push to github.com/kartikparsoya-eng/ErrorMux
 
 ### Out of Scope
 
@@ -36,7 +51,7 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 - **Shipped:** v1.0 MVP on 2026-04-16
 - **LOC:** 432 lines Python
 - **Test coverage:** 92% (63 tests passing)
-- Ollama runs locally at localhost:11434 with gemma3:4b
+- Ollama runs locally at localhost:11434 with gemma4:e2b (switching from gemma3:4b)
 - Python 3.12 with `uv` for dependency management (httpx, typer, rich)
 - zsh plugin uses preexec/precmd hooks for capture
 - Cache stored at `~/.shell-explainer/cache.db`
@@ -45,7 +60,7 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 ## Constraints
 
 - **Stack**: Python 3.12, uv, httpx, typer, rich, SQLite — minimal dependencies
-- **Model**: gemma3:4b via Ollama localhost:11434 (hard requirement)
+- **Model**: gemma4:e2b via Ollama localhost:11434 (hard requirement)
 - **Timeout**: 10s max for Ollama requests; graceful degradation on failure
 - **Shell**: zsh only — leverages zsh-specific hook mechanisms
 
@@ -61,6 +76,23 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 | pytest-cov 80% threshold | Industry standard, catches uncovered paths | ✓ Good (92% achieved) |
 | Ctrl+X ? binding | Avoids zsh glob conflicts with ?? | ✓ Good |
 
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
 ---
 
-*Last updated: 2026-04-16 after v1.0 milestone*
+*Last updated: 2026-04-16 after starting milestone v1.1*

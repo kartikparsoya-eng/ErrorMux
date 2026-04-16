@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Test Coverage](https://img.shields.io/badge/Coverage-0%25-red)](https://github.com/kartikparsoya-eng/ErrorMux)
 
-A zsh plugin that explains shell command failures on-demand. When a command fails, press `Alt+E` (Option+E on macOS) to get a one-sentence explanation and suggested fix from a local Gemma model (via Ollama).
+A zsh plugin that explains shell command failures on-demand. When a command fails, type `??` to get a one-sentence explanation and suggested fix from a local Gemma model (via Ollama).
 
 **Features:**
 - Fast, local, offline-first — no cloud dependency
@@ -65,7 +65,7 @@ source ~/.zshrc
 
 1. Ensure Ollama is running: `ollama serve`
 2. Pull the required model: `ollama pull gemma4:e2b`
-3. Run a failing command, then press `Alt+E` (Option+E on macOS)
+3. Run a failing command, then type `??`
 
 ## Usage
 
@@ -73,7 +73,7 @@ source ~/.zshrc
 $ ls /nonexistent
 ls: /nonexistent: No such file or directory
 
-$ # Press Alt+E (Option+E on macOS)
+$ ??
 WHY: Directory does not exist.
 FIX: Check the path with 'ls' or create it with 'mkdir -p /nonexistent'
 ```

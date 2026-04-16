@@ -111,5 +111,8 @@ precmd_functions+=(_errormux_precmd)
 # Create zle widget
 zle -N errormux-explain _errormux_explain
 
-# Bind to Alt+E (Option+E on macOS)
-bindkey '\ee' errormux-explain
+# Alias: ?? command for triggering explanation
+# This is a shell command, not a keybinding
+??() {
+    _errormux_explain
+}

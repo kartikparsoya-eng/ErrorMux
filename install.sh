@@ -154,7 +154,7 @@ if [[ "$IS_OMZ" == "true" ]]; then
     echo "  1. Add 'errormux' to plugins in ~/.zshrc"
     echo "  2. Open a new terminal (or run: source ~/.zshrc)"
     echo "  3. Run a command that fails"
-    echo "  4. Press Alt+E for an explanation"
+    echo "  4. Type ?? for an explanation"
 else
     echo "Files:"
     echo "  Plugin:     $PLUGIN_FILE"

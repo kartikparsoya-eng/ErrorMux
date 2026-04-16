@@ -6,13 +6,10 @@ set -euo pipefail
 # ==============================================================================
 # Single-command installer for the ErrorMux zsh plugin.
 # Usage: curl -sSL https://.../install.sh | bash
-#   or:  git clone https://github.com/YOUR_USERNAME/errormux.git && ./install.sh
+#   or:  git clone https://github.com/kartikparsoya-eng/ErrorMux.git && ./install.sh
+#
+# Detects Oh My Zsh and uses appropriate plugin path automatically.
 # ==============================================================================
-
-INSTALL_DIR="$HOME/.shell-explainer"
-PLUGIN_FILE="$INSTALL_DIR/errormux.plugin.zsh"
-SOURCE_LINE="source ~/.shell-explainer/errormux.plugin.zsh"
-REPO_URL="https://github.com/YOUR_USERNAME/errormux.git"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -23,6 +20,44 @@ NC='\033[0m' # No Color
 info() { echo -e "${GREEN}[errormux]${NC} $1"; }
 warn() { echo -e "${YELLOW}[errormux warning]${NC} $1"; }
 error() { echo -e "${RED}[errormux error]${NC} $1"; exit 1; }
+
+# ==============================================================================
+# Oh My Zsh Detection (T-01)
+# ==============================================================================
+
+detect_omz_path() {
+    # Primary: Check ZSH_CUSTOM env var
+    if [[ -n "${ZSH_CUSTOM:-}" ]]; then
+        echo "${ZSH_CUSTOM}/plugins/errormux"
+        return 0
+    fi
+    
+    # Fallback: Check standard Oh My Zsh custom plugins path
+    if [[ -d "$HOME/.oh-my-zsh/custom/plugins" ]]; then
+        echo "$HOME/.oh-my-zsh/custom/plugins/errormux"
+        return 0
+    fi
+    
+    # Not found
+    return 1
+}
+
+# ==============================================================================
+# Detect Install Path (T-02, T-04)
+# ==============================================================================
+
+REPO_URL="https://github.com/kartikparsoya-eng/ErrorMux.git"
+
+if OMZ_PATH=$(detect_omz_path); then
+    INSTALL_DIR="$OMZ_PATH"
+    IS_OMZ=true
+else
+    INSTALL_DIR="$HOME/.shell-explainer"
+    IS_OMZ=false
+fi
+
+PLUGIN_FILE="$INSTALL_DIR/errormux.plugin.zsh"
+SOURCE_LINE="source $PLUGIN_FILE"
 
 # ==============================================================================
 # Pre-flight Checks
@@ -65,7 +100,7 @@ fi
 info "Plugin installed successfully."
 
 # ==============================================================================
-# .zshrc Modification
+# .zshrc Modification (T-03)
 # ==============================================================================
 
 # Create .zshrc if it doesn't exist
@@ -74,14 +109,27 @@ if [[ ! -f ~/.zshrc ]]; then
     touch ~/.zshrc
 fi
 
-# Check if source line already exists (D-07: grep -qF for exact match)
-if grep -qF "$SOURCE_LINE" ~/.zshrc 2>/dev/null; then
-    info ".zshrc already configured."
+if [[ "$IS_OMZ" == "true" ]]; then
+    # Oh My Zsh: Check if already in plugins
+    if grep -qF "errormux" ~/.zshrc 2>/dev/null; then
+        info ".zshrc already configured."
+    else
+        info "Oh My Zsh detected!"
+        info "Add 'errormux' to your plugins array in ~/.zshrc:"
+        echo ""
+        echo "  plugins=(git errormux ...)"
+        echo ""
+    fi
 else
-    info "Adding source line to .zshrc..."
-    echo "" >> ~/.zshrc
-    echo "# ErrorMux - on-demand error explanations" >> ~/.zshrc
-    echo "$SOURCE_LINE" >> ~/.zshrc
+    # Non-Oh My Zsh: Use source line (existing logic)
+    if grep -qF "$SOURCE_LINE" ~/.zshrc 2>/dev/null; then
+        info ".zshrc already configured."
+    else
+        info "Adding source line to .zshrc..."
+        echo "" >> ~/.zshrc
+        echo "# ErrorMux - on-demand error explanations" >> ~/.zshrc
+        echo "$SOURCE_LINE" >> ~/.zshrc
+    fi
 fi
 
 # ==============================================================================
@@ -93,19 +141,29 @@ cd "$INSTALL_DIR"
 uv sync || error "Failed to install Python dependencies with 'uv sync'."
 
 # ==============================================================================
-# Success Message
+# Success Message (T-06)
 # ==============================================================================
 
 echo ""
 info "✓ Installation complete!"
 echo ""
-echo "Next steps:"
-echo "  1. Open a new terminal (or run: source ~/.zshrc)"
-echo "  2. Run a command that fails"
-echo "  3. Type ?? for an explanation"
-echo ""
-echo "Files:"
-echo "  Plugin:     ~/.shell-explainer/errormux.plugin.zsh"
-echo "  Config:     ~/.shell-explainer/config.toml"
-echo "  Cache:      ~/.shell-explainer/cache.db"
+if [[ "$IS_OMZ" == "true" ]]; then
+    echo "Oh My Zsh installed to: $INSTALL_DIR"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Add 'errormux' to plugins in ~/.zshrc"
+    echo "  2. Open a new terminal (or run: source ~/.zshrc)"
+    echo "  3. Run a command that fails"
+    echo "  4. Type ?? for an explanation"
+else
+    echo "Files:"
+    echo "  Plugin:     $PLUGIN_FILE"
+    echo "  Config:     ~/.shell-explainer/config.toml"
+    echo "  Cache:      ~/.shell-explainer/cache.db"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Open a new terminal (or run: source ~/.zshrc)"
+    echo "  2. Run a command that fails"
+    echo "  3. Type ?? for an explanation"
+fi
 echo ""

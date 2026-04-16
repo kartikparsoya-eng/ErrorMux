@@ -6,7 +6,7 @@ from rich.console import Console
 import typer
 
 from errormux.cache import cache_get, cache_set, make_cache_key
-from errormux.client import chat_with_ollama
+from errormux.client import chat_with_ollama, OLLAMA_MODEL
 from errormux.parser import ParseError, parse_response
 from errormux.prompts import SYSTEM_PROMPT, build_user_prompt
 from errormux.skip import extract_command_name, should_skip
@@ -67,7 +67,7 @@ def explain(
             )
             return
 
-    cache_key = make_cache_key(cmd, stderr)
+    cache_key = make_cache_key(OLLAMA_MODEL, cmd, stderr)
     cached_response = cache_get(cache_key)
 
     if cached_response:

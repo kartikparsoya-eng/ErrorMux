@@ -10,9 +10,9 @@ CACHE_DB = CACHE_DIR / "cache.db"
 TTL_SECONDS = 7 * 24 * 60 * 60
 
 
-def make_cache_key(cmd: str, stderr: str) -> str:
-    """Generate SHA256 cache key from command and stderr."""
-    return hashlib.sha256(f"{cmd}|{stderr}".encode()).hexdigest()
+def make_cache_key(model: str, cmd: str, stderr: str) -> str:
+    """Generate SHA256 cache key from model, command, and stderr."""
+    return hashlib.sha256(f"{model}|{cmd}|{stderr}".encode()).hexdigest()
 
 
 def _ensure_db() -> None:
@@ -68,5 +68,13 @@ def cache_delete(key: str) -> None:
     """Delete cached response."""
     conn = sqlite3.connect(CACHE_DB)
     conn.execute("DELETE FROM cache WHERE key = ?", (key,))
+    conn.commit()
+    conn.close()
+
+
+def cache_clear() -> None:
+    """Clear all cached responses."""
+    conn = sqlite3.connect(CACHE_DB)
+    conn.execute("DELETE FROM cache")
     conn.commit()
     conn.close()

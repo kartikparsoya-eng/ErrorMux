@@ -28,22 +28,29 @@ def temp_cache_db(monkeypatch, tmp_path):
 
 def test_cache_key_deterministic():
     """Same input produces same key."""
-    key1 = make_cache_key("ls foo", "error")
-    key2 = make_cache_key("ls foo", "error")
+    key1 = make_cache_key("gemma4:e2b", "ls foo", "error")
+    key2 = make_cache_key("gemma4:e2b", "ls foo", "error")
     assert key1 == key2
 
 
 def test_cache_key_different_stderr():
     """Different stderr produces different key."""
-    key1 = make_cache_key("ls foo", "error1")
-    key2 = make_cache_key("ls foo", "error2")
+    key1 = make_cache_key("gemma4:e2b", "ls foo", "error1")
+    key2 = make_cache_key("gemma4:e2b", "ls foo", "error2")
     assert key1 != key2
 
 
 def test_cache_key_different_cmd():
     """Different command produces different key."""
-    key1 = make_cache_key("ls foo", "error")
-    key2 = make_cache_key("ls bar", "error")
+    key1 = make_cache_key("gemma4:e2b", "ls foo", "error")
+    key2 = make_cache_key("gemma4:e2b", "ls bar", "error")
+    assert key1 != key2
+
+
+def test_cache_key_different_model():
+    """Different model produces different key."""
+    key1 = make_cache_key("gemma3:4b", "ls foo", "error")
+    key2 = make_cache_key("gemma4:e2b", "ls foo", "error")
     assert key1 != key2
 
 
@@ -110,7 +117,9 @@ def test_cli_cache_hit(monkeypatch, tmp_path, capsys):
     monkeypatch.setattr(cli, "TEMP_STDERR", stderr_file)
     monkeypatch.setattr(cli, "TEMP_EXIT", exit_file)
 
-    cache_key = make_cache_key("ls nonexistent", "No such file or directory")
+    cache_key = make_cache_key(
+        "gemma4:e2b", "ls nonexistent", "No such file or directory"
+    )
     cache_set(cache_key, "WHY: Directory does not exist\nFIX: mkdir nonexistent")
 
     cli.explain()
@@ -141,7 +150,7 @@ def test_cli_cache_miss_then_hit(monkeypatch, tmp_path):
     monkeypatch.setattr(cli, "TEMP_STDERR", stderr_file)
     monkeypatch.setattr(cli, "TEMP_EXIT", exit_file)
 
-    cache_key = make_cache_key("ls missing", "error")
+    cache_key = make_cache_key("gemma4:e2b", "ls missing", "error")
     assert cache_get(cache_key) is None
 
     cache_set(cache_key, "WHY: test\nFIX: test fix")

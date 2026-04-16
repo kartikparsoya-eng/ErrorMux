@@ -7,7 +7,7 @@ import ollama
 # Constants per project constraints and D-09
 OLLAMA_HOST = "http://localhost:11434"
 OLLAMA_TIMEOUT = 10.0  # 10s timeout per D-09
-OLLAMA_MODEL = "gemma3:4b"  # Project constraint
+OLLAMA_MODEL = "gemma4:e2b"  # Project constraint
 
 
 def chat_with_ollama(system_prompt: str, user_prompt: str) -> str:

@@ -95,6 +95,9 @@ precmd_functions+=(_errormux_precmd)
 # Widget Registration
 # ==============================================================================
 
-# Create zle widget and bind to `??` key sequence
+# Create zle widget
 zle -N errormux-explain _errormux_explain
-bindkey '??' errormux-explain
+
+# Bind to Ctrl+X ? to avoid glob conflicts
+# Usage: Press Ctrl+X then ?
+bindkey '^X?' errormux-explain

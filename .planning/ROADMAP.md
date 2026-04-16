@@ -73,7 +73,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can install via one-line curl command
   3. User can install manually with documented git clone + .zshrc steps
   4. install.sh script detects Oh My Zsh automatically and uses correct path
-**Plans**: TBD
+**Plans**: 3 plans
+- [x] 09-01-PLAN.md — Update install.sh with Oh My Zsh detection
+- [x] 09-02-PLAN.md — Create uninstall.sh script
+- [x] 09-03-PLAN.md — Update README with installation documentation
 
 ### Phase 10: GitHub Polish
 **Goal**: Professional GitHub presence with complete documentation
@@ -104,9 +107,9 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 | 6. Testing | v1.0 | 2/2 | Complete | 2026-04-16 |
 | 7. Widget Auto-Return Fix | v1.1 | 0/2 | Not started | - |
 | 8. Model Switch | v1.1 | 2/2 | Complete | 2026-04-16 |
-| 9. Packaging | v1.1 | 0/TBD | Not started | - |
+| 9. Packaging | v1.1 | 3/3 | Complete | 2026-04-16 |
 | 10. GitHub Polish | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-04-15*
-*Last updated: 2026-04-16 after roadmap creation for v1.1*
+*Last updated: 2026-04-16 after Phase 9 completion*

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Package
 status: executing
-last_updated: "2026-04-16T07:45:00.000Z"
-last_activity: 2026-04-16 — Phase 8: Model Switch completed
+last_updated: "2026-04-16T08:00:00.000Z"
+last_activity: 2026-04-16
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  completed_phases: 3
+  total_plans: 10
+  completed_plans: 10
   percent: 100
 ---
 
@@ -20,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** Fast, local, on-demand error explanations that don't interrupt your flow — only when you ask for them.
-**Current focus:** Phase 8 (Model Switch) — Complete
+**Current focus:** Phase 9 (Packaging) — Complete
 
 ## Current Position
 
-Phase: 8 of 10 (Model Switch)
-Plan: 2 of 2 in current phase
-Status: Complete
-Last activity: 2026-04-16 — Phase 8: Model Switch completed
+Phase: 9 of 10 (Packaging)
+Plan: 3 of 3 in current phase
+Status: Phase complete — ready for next phase
+Last activity: 2026-04-16
 
 Progress: [██████████] 100%
 
@@ -35,8 +35,8 @@ Progress: [██████████] 100%
 
 **Velocity:**
 
-- Total plans completed: 14 (12 v1.0 + 2 v1.1)
-- Total phases completed: 7 (6 v1.0 + 1 v1.1)
+- Total plans completed: 17 (12 v1.0 + 5 v1.1)
+- Total phases completed: 8 (6 v1.0 + 2 v1.1)
 - Test coverage: 89%
 
 **By Phase (v1.0):**
@@ -55,11 +55,12 @@ Progress: [██████████] 100%
 | Phase | Plans | Status |
 |-------|-------|--------|
 | 8. Model Switch | 2 | Complete |
+| 9. Packaging | 3 | Complete |
 
 **Recent Trend:**
 
 - v1.0 shipped successfully
-- v1.1 in progress - Phase 8 complete
+- v1.1 in progress - Phase 9 complete
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase 8]: Config file at ~/.shell-explainer/config.toml documents model requirement
 - [Phase 8]: Old cache purged on first run to prevent stale explanations
 - [Phase 8]: Model not found error provides helpful ollama pull command
+- [Phase 9]: install.sh detects Oh My Zsh via $ZSH_CUSTOM and fallback paths
+- [Phase 9]: Do not auto-modify .zshrc plugins array - print instructions instead
+- [Phase 9]: uninstall.sh detects install location and prints cleanup instructions
 
 ### Pending Todos
 
@@ -88,14 +92,14 @@ None.
 
 ## Session Continuity
 
-Phase 8: Model Switch completed on 2026-04-16.
-- Model constant updated to gemma4:e2b
-- Cache key includes model name
-- Config file generated with model documentation
-- Old cache purged on first run
+Phase 9: Packaging completed on 2026-04-16.
 
-Next action: `/gsd-execute-phase 9` or `/gsd-plan-phase 9`
+- install.sh updated with Oh My Zsh detection ($ZSH_CUSTOM + fallback)
+- uninstall.sh created for clean removal with confirmation
+- README.md updated with three installation methods documented
+
+Next action: `/gsd-execute-phase 10` or `/gsd-plan-phase 10`
 
 ---
 *State initialized: 2026-04-15*
-*Last updated: 2026-04-16 after Phase 8 completion*
+*Last updated: 2026-04-16 after Phase 9 completion*

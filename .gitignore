@@ -29,3 +29,6 @@ uv.lock
 .vscode/
 *.swp
 *.swo
+
+# GSD workflow
+.planning/

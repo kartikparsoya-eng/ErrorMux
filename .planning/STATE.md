@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Polish & Package
-status: complete
-last_updated: "2026-04-16T15:31:00.000Z"
+milestone: null
+milestone_name: null
+status: idle
+last_updated: "2026-04-16T16:00:00.000Z"
 last_activity: 2026-04-16
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 13
-  completed_plans: 13
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -20,73 +20,37 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** Fast, local, on-demand error explanations that don't interrupt your flow — only when you ask for them.
-**Current focus:** v1.1 Released — Phase 10 complete
+**Current focus:** Milestone v1.1 complete — ready for next milestone planning
 
 ## Current Position
 
-Phase: 10 of 10 (GitHub Polish)
-Plan: 4 of 4 in current phase
-Status: **MILESTONE COMPLETE** — v1.1.0 released
+Phase: —
+Plan: —
+Status: **IDLE** — awaiting next milestone
 Last activity: 2026-04-16
 
-Progress: [██████████] 100%
+Progress: [          ] 0%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 20 (12 v1.0 + 8 v1.1)
-- Total phases completed: 9 (6 v1.0 + 3 v1.1)
+- Total plans completed: 23 (12 v1.0 + 11 v1.1)
+- Total phases completed: 10 (6 v1.0 + 4 v1.1)
 - Test coverage: 89%
 
-**By Phase (v1.0):**
+**Shipped Releases:**
 
-| Phase | Plans | Status |
-|-------|-------|--------|
-| 1. Capture Layer | 2 | Complete |
-| 2. CLI + Ollama Core | 2 | Complete |
-| 3. Cache System | 2 | Complete |
-| 4. Skip-List Filtering | 2 | Complete |
-| 5. Installation | 2 | Complete |
-| 6. Testing | 2 | Complete |
-
-**By Phase (v1.1):**
-
-| Phase | Plans | Status |
-|-------|-------|--------|
-| 7. Widget Auto-Return Fix | 1 | Complete |
-| 8. Model Switch | 2 | Complete |
-| 9. Packaging | 3 | Complete |
-| 10. GitHub Polish | 4 | Complete |
-
-**Recent Trend:**
-
-- v1.0 shipped successfully
-- v1.1 shipped successfully — Released 2026-04-16
+| Version | Name | Date | Phases | Plans |
+|---------|------|------|--------|-------|
+| v1.0 | MVP | 2026-04-16 | 6 | 12 |
+| v1.1 | Polish & Package | 2026-04-16 | 4 | 11 |
 
 ## Accumulated Context
 
 ### Decisions
 
 All decisions logged in PROJECT.md Key Decisions table.
-
-Recent decisions affecting current work:
-
-- Widget fix must use `zle reset-prompt` + `zle -R` pattern (standard zsh ZLE)
-- Cache key must include model name to prevent stale explanations
-- File naming `errormux.plugin.zsh` already satisfies Oh My Zsh convention
-- [Phase 7]: WUX-01 verified: prompt auto-returns after explanation without Enter
-- [Phase 7]: WUX-02 verified: widget exits cleanly, no manual keypress needed
-- [Phase 8]: Config file at ~/.shell-explainer/config.toml documents model requirement
-- [Phase 8]: Old cache purged on first run to prevent stale explanations
-- [Phase 8]: Model not found error provides helpful ollama pull command
-- [Phase 9]: install.sh detects Oh My Zsh via $ZSH_CUSTOM and fallback paths
-- [Phase 9]: Do not auto-modify .zshrc plugins array - print instructions instead
-- [Phase 9]: uninstall.sh detects install location and prints cleanup instructions
-- [Phase 10]: MIT License with year 2026, holder kartikparsoya-eng
-- [Phase 10]: shields.io badges for License and Test Coverage
-- [Phase 10]: Demo GIF deferred - DEMO-RECORDING.md created for future use
-- [Phase 10]: Released as v1.1.0 on GitHub
 
 ### Pending Todos
 
@@ -98,18 +62,18 @@ None.
 
 ## Session Continuity
 
-Phase 10: GitHub Polish completed on 2026-04-16.
+**Milestone v1.1 completed on 2026-04-16.**
 
-- LICENSE file created (MIT, 2026, kartikparsoya-eng)
-- README.md updated with shields.io badges
-- DEMO-RECORDING.md created (demo GIF deferred)
-- Pushed to GitHub: github.com/kartikparsoya-eng/ErrorMux
-- Tag v1.1.0 created and pushed
-- GitHub Release published
+Archived to:
+- `.planning/milestones/v1.1-ROADMAP.md`
+- `.planning/milestones/v1.1-REQUIREMENTS.md`
 
-**GitHub Release URL:** https://github.com/kartikparsoya-eng/ErrorMux/releases/tag/v1.1.0
+Released:
+- Tag: v1.1.0
+- GitHub: https://github.com/kartikparsoya-eng/ErrorMux
+- Release: https://github.com/kartikparsoya-eng/ErrorMux/releases/tag/v1.1.0
 
 ---
 
 *State initialized: 2026-04-15*
-*Last updated: 2026-04-16 after Phase 10 completion — v1.1.0 Released*
+*Last updated: 2026-04-16 after v1.1 milestone completion*

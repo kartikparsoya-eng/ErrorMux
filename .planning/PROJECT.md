@@ -12,50 +12,46 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 
 ### Validated
 
-- ✓ zsh capture layer hooks stderr, exit code, and command text for every interactive command — v1.0
+- ✓ zsh capture layer hooks stderr, exit code, and command text — v1.0
 - ✓ `??` widget reads captured data and invokes Python CLI — v1.0
 - ✓ Python CLI checks SQLite cache (7-day TTL) before calling Ollama — v1.0
 - ✓ Ollama returns structured WHY/FIX output, streamed via Rich — v1.0
-- ✓ Skip-list filters out false-positive "errors" (grep exit 1, test/[[, diff exit 1) — v1.0
+- ✓ Skip-list filters false-positive "errors" (grep exit 1, test/[[, diff exit 1) — v1.0
 - ✓ Install script sets up plugin, Python deps, and .zshrc sourcing — v1.0
 - ✓ Test suite covers cache, skip-list, and prompt construction — v1.0 (92% coverage)
+- ✓ Widget auto-returns to prompt after showing output — v1.1
+- ✓ Model switched to gemma4:e2b with model-scoped cache keys — v1.1
+- ✓ Config file documents model requirement for users — v1.1
+- ✓ Multi-method installation (Oh My Zsh, curl, manual) — v1.1
+- ✓ Comprehensive README with install/uninstall docs — v1.1
+- ✓ MIT License and GitHub badges — v1.1
+- ✓ Published to github.com/kartikparsoya-eng/ErrorMux — v1.1
 
 ### Active
 
-- [ ] Fix ?? widget to auto-return to prompt after showing output
-- [ ] Switch Ollama model from gemma3:4b to gemma4:e2b
-- [ ] Package for multiple install methods (git clone, Oh My Zsh, manual)
-- [ ] Polish repo: README with usage docs, demo gif, LICENSE, test badges
-- [ ] Push to github.com/kartikparsoya-eng/ErrorMux
-
-## Current Milestone: v1.1 Polish & Package
-
-**Goal:** Fix UX issues, switch to Gemma 4, package for public distribution, and publish to GitHub.
-
-**Target features:**
-- Fix ?? widget to auto-return to prompt after showing output
-- Switch Ollama model from gemma3:4b to gemma4:e2b
-- Package for multiple install methods (git clone, Oh My Zsh, manual)
-- Polish repo: README with usage docs, demo gif, LICENSE, test badges
-- Push to github.com/kartikparsoya-eng/ErrorMux
+(None — milestone complete)
 
 ### Out of Scope
 
-- Auto-printing on every error (opt-in via `??` only)
-- Cloud fallback or remote LLM APIs
-- Multi-shell support (zsh only, no bash/fish)
-- GUI or TUI beyond the single `??` output
+| Feature | Reason |
+|---------|--------|
+| Auto-printing on every error | Opt-in via `??` only is core value |
+| Cloud fallback or remote LLM APIs | Offline-first is core value |
+| Multi-shell support (bash/fish) | zsh-specific hooks are core to design |
+| GUI or TUI | Single ?? output is core design |
+| GitHub Actions CI workflow | Deferred to v2 (requires repo setup first) |
 
 ## Context
 
-- **Shipped:** v1.0 MVP on 2026-04-16
-- **LOC:** 432 lines Python
-- **Test coverage:** 92% (63 tests passing)
-- Ollama runs locally at localhost:11434 with gemma4:e2b (switching from gemma3:4b)
-- Python 3.12 with `uv` for dependency management (httpx, typer, rich)
+- **Shipped:** v1.0 MVP (2026-04-16), v1.1 Polish & Package (2026-04-16)
+- **LOC:** 1,370 lines Python
+- **Test coverage:** 89% (64 tests passing)
+- Ollama runs locally at localhost:11434 with gemma4:e2b
+- Python 3.12 with `uv` for dependency management (httpx, typer, rich, tomli)
 - zsh plugin uses preexec/precmd hooks for capture
 - Cache stored at `~/.shell-explainer/cache.db`
 - Config at `~/.shell-explainer/config.toml`
+- **GitHub:** https://github.com/kartikparsoya-eng/ErrorMux
 
 ## Constraints
 
@@ -72,27 +68,23 @@ Fast, local, on-demand error explanations that don't interrupt your flow — onl
 | Concurrency: Block on in-flight request | Simplest implementation, avoids race conditions | ✓ Good |
 | Plugin name: errormux | Matches directory name, shorter than shell-explainer | ✓ Good |
 | SQLite for cache | Local, zero-config, fast lookups by SHA256 key | ✓ Good |
-| httpx MockTransport for testing | Strict TEST-04 compliance, tests real transport layer | ✓ Good |
-| pytest-cov 80% threshold | Industry standard, catches uncovered paths | ✓ Good (92% achieved) |
+| httpx MockTransport for testing | Strict TEST-04 compliance, tests real transport layer | ✓ Good (89% achieved) |
+| pytest-cov 80% threshold | Industry standard, catches uncovered paths | ✓ Good |
 | Ctrl+X ? binding | Avoids zsh glob conflicts with ?? | ✓ Good |
+| ZLE reset pattern for widget | Standard zsh pattern for clean prompt return | ✓ Good |
+| Model name in cache key | Prevents stale explanations after model switch | ✓ Good |
+| Config file auto-generation | Users know what model to install | ✓ Good |
+| Multi-method installation | Reaches wider audience (Oh My Zsh users) | ✓ Good |
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
 
-**After each phase transition** (via `/gsd-transition`):
-1. Requirements invalidated? → Move to Out of Scope with reason
-2. Requirements validated? → Move to Validated with phase reference
-3. New requirements emerged? → Add to Active
-4. Decisions to log? → Add to Key Decisions
-5. "What This Is" still accurate? → Update if drifted
-
-**After each milestone** (via `/gsd-complete-milestone`):
-1. Full review of all sections
-2. Core Value check — still the right priority?
-3. Audit Out of Scope — reasons still valid?
-4. Update Context with current state
+**v1.1 Changes:**
+- All Active requirements moved to Validated
+- Context updated with v1.1 release info
+- 4 new Key Decisions added from v1.1 phases
 
 ---
 
-*Last updated: 2026-04-16 after starting milestone v1.1*
+*Last updated: 2026-04-16 after v1.1 milestone completion*

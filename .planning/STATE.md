@@ -4,10 +4,10 @@ milestone: v1.1
 milestone_name: Polish & Package
 status: planning
 stopped_at: —
-last_updated: "2026-04-16T07:00:00.000Z"
+last_updated: "2026-04-16T08:00:00.000Z"
 last_activity: 2026-04-16
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** Fast, local, on-demand error explanations that don't interrupt your flow — only when you ask for them.
-**Current focus:** Defining requirements for milestone v1.1
+**Current focus:** Phase 7 (Widget Auto-Return Fix)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-04-16 — Milestone v1.1 started
+Phase: 7 of 10 (Widget Auto-Return Fix)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-04-16 — Roadmap created for v1.1
 
-Progress: [          ] 0%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -51,11 +51,20 @@ Progress: [          ] 0%
 | 5. Installation | 2 | Complete |
 | 6. Testing | 2 | Complete |
 
+**Recent Trend:**
+- v1.0 shipped successfully
+- New milestone v1.1 started
+
 ## Accumulated Context
 
 ### Decisions
 
 All decisions logged in PROJECT.md Key Decisions table.
+
+Recent decisions affecting current work:
+- Widget fix must use `zle reset-prompt` + `zle -R` pattern (standard zsh ZLE)
+- Cache key must include model name to prevent stale explanations
+- File naming `errormux.plugin.zsh` already satisfies Oh My Zsh convention
 
 ### Pending Todos
 
@@ -67,9 +76,11 @@ None.
 
 ## Session Continuity
 
-Milestone v1.1 started on 2026-04-16.
-Currently defining requirements.
+Milestone v1.1 roadmap created on 2026-04-16.
+Ready to plan Phase 7: Widget Auto-Return Fix.
+
+Next action: `/gsd-plan-phase 7`
 
 ---
 *State initialized: 2026-04-15*
-*Milestone v1.1 started: 2026-04-16*
+*Last updated: 2026-04-16 after roadmap creation*

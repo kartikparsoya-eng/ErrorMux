@@ -68,7 +68,7 @@ _errormux_explain() {
     # Read last exit code from tmp file
     local exit_code
     exit_code=$(cat /tmp/shell-explainer-last-exit 2>/dev/null || echo "0")
-    
+
     # CAPT-05: Skip explanation for non-error exit codes
     # 0 = success
     # 130 = SIGINT (Ctrl+C)
@@ -76,10 +76,15 @@ _errormux_explain() {
     if [[ "$exit_code" -eq 0 ]] || [[ "$exit_code" -eq 130 ]] || [[ "$exit_code" -eq 148 ]]; then
         return 0
     fi
-    
-    # CAPT-04: Invoke Python CLI (stub in Phase 1)
-    # Real implementation with Ollama integration comes in Phase 2
+
+    # CAPT-04: Invoke Python CLI
     errormux
+
+    # WUX-01, WUX-02: Reset prompt after CLI completes
+    # D-01, D-02: redraws the prompt line cleanly
+    zle reset-prompt
+    # D-09, D-10: Redisplay any pending input buffer
+    zle -R
 }
 
 # ==============================================================================

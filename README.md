@@ -1,5 +1,8 @@
 # ErrorMux
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Test Coverage](https://img.shields.io/badge/Coverage-0%25-red)](https://github.com/kartikparsoya-eng/ErrorMux)
+
 A zsh plugin that explains shell command failures on-demand. When a command fails, type `??` to get a one-sentence explanation and suggested fix from a local Gemma model (via Ollama).
 
 **Features:**

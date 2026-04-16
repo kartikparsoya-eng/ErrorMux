@@ -1,188 +1,379 @@
 # Feature Research
 
-**Domain:** Shell error explanation/assistance tools
-**Researched:** 2026-04-15
-**Confidence:** HIGH
+**Domain:** zsh plugin — on-demand shell error explanations
+**Researched:** 2026-04-16 (v1.1 milestone update)
+**Confidence:** HIGH (official Ollama docs, Oh My Zsh wiki, existing codebase analysis)
 
-## Feature Landscape
+> **Note:** This file focuses on v1.1 features (widget fix, model switch, packaging, GitHub polish). For core feature landscape from v1.0, see the archived version. This update addresses subsequent milestone requirements.
+
+## Feature Landscape (v1.1 Focus)
 
 ### Table Stakes (Users Expect These)
 
-Features users assume exist. Missing these = product feels incomplete.
-
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| **Command capture** | Users expect the tool to know what command failed | LOW | Standard shell hooks (preexec/precmd) |
-| **Exit code awareness** | Essential to know command failed | LOW | Built into shell |
-| **Stderr capture** | Error messages are the primary diagnostic | MEDIUM | Requires careful hook implementation |
-| **On-demand trigger** | Users don't want noise on every command | LOW | Simple keybinding |
-| **Fast response** | Delays kill workflow | MEDIUM | Sub-second for cached, <10s for fresh |
-| **No configuration required** | Install and go | MEDIUM | Sensible defaults are essential |
-| **Offline capability** | Developers work offline often | HIGH | Local model or cached responses |
+| Auto-return to prompt after output | Users press `??` once, expect clean prompt after. Manual Enter press feels broken. | LOW | ZLE widget fix: call `zle reset-prompt` after output completes |
+| Correct model name in docs | If README says `gemma4:e2b`, code should match. Mismatch looks unprofessional. | LOW | Single-line config change in `client.py` |
+| Working installation instructions | Users expect `git clone && ./install.sh` to work without hunting for steps. | MEDIUM | Update install.sh URL, add Oh My Zsh instructions |
+| LICENSE file | Open source repos without LICENSE are "all rights reserved" by default. GitHub flags this. | LOW | Create MIT LICENSE file |
+| README with usage | Empty/minimal README makes project look abandoned. | MEDIUM | Add demo GIF, installation methods, usage examples |
 
 ### Differentiators (Competitive Advantage)
 
-Features that set the product apart. Not required, but valuable.
-
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Local LLM (offline-first)** | Works without internet, no API costs, privacy | HIGH | ErrorMux's core differentiator |
-| **Cache-backed speed** | Instant response for repeated errors | MEDIUM | SQLite with TTL |
-| **Structured output (WHY + FIX)** | Clear, actionable information | LOW | Prompt engineering |
-| **Skip-list for false positives** | Avoids noise from grep exit 1, test failures | MEDIUM | Critical for UX |
-| **One-sentence explanation** | Quick comprehension without verbosity | LOW | Prompt constraint |
-| **Zero cloud dependency** | Privacy, no tracking, works anywhere | LOW | Architecture decision |
-| **Shell-agnostic hook system** | Works on zsh, bash, fish | MEDIUM | ErrorMux is zsh-only (intentional scope) |
+| Multiple install methods (Oh My Zsh, git, manual) | Meets users where they are. OMZ users want `plugins=(errormux)`. | MEDIUM | Add OMZ-compatible directory structure |
+| Demo GIF in README | Shows plugin in action. Users can see exactly what they're getting before installing. | MEDIUM | Use asciinema/terminalizer, embed in README |
+| Test coverage badge | Signals code quality. 92% coverage is a strong differentiator for a "simple" plugin. | LOW | Add badge to README header |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
-Features that seem good but create problems.
-
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| **Auto-print on every error** | "Why do I have to type `??`?" | Noisy, breaks flow, false positives from grep/diff/test | On-demand trigger (`??`) |
-| **Cloud LLM fallback** | "Better explanations with GPT-4" | Privacy concern, API costs, latency, offline dependency | Local model only |
-| **Multi-shell support** | "I use bash sometimes" | Dilutes core experience, zsh-specific hooks are superior | Focus on zsh, excellent zsh experience |
-| **Rich TUI for explanations** | "More information, better UI" | Slows response, over-engineering for MVP | One-line WHY + one-line FIX |
-| **Command execution from tool** | "Auto-fix and run" | Dangerous, bypasses user review | Show fix, let user run |
-| **Learning mode (teaching correct fixes)** | "Get smarter over time" | Complex, adds state, potential for bad feedback loops | Simple cache with TTL |
+| Auto-explain on every error | "Wouldn't it be great if errors explained themselves?" | Disrupts flow, spams output, slows shell, burns tokens. Violates "on-demand" core value. | Keep opt-in via `??` — user requests explanation only when needed |
+| Configurable model | "I want to use llama3.2 instead" | Adds complexity, different models have different prompting needs. MVP should stay focused. | Hardcode `gemma4:e2b` per project constraint. Consider config in v2 if requested |
+| Bash/Fish support | "I use bash, make it work there too" | Hooks differ significantly, testing burden triples, preexec works differently in bash. | zsh only per constraint. Shell market share favors zsh for this use case |
 
 ## Feature Dependencies
 
 ```
-Command Capture (preexec/precmd hooks)
-    └──requires──> Shell Plugin Infrastructure
-                       
-Cache System (SQLite)
-    └──requires──> Command Capture (for cache key)
-                       
-LLM Integration (Ollama)
-    └──requires──> Command Capture + Stderr
-                       
-Structured Output (WHY/FIX)
-    └──requires──> LLM Integration + Prompt Engineering
-                       
-Skip-list
-    └──requires──> Command Capture + Exit Code
-                       
-`??` Widget
-    └──requires──> All of the above
+Widget Auto-Return Fix
+    └── No dependencies — standalone UX fix
+    └── Impacts: Demo GIF (need correct behavior for recording)
+
+Model Switch (gemma3:4b → gemma4:e2b)
+    └── No dependencies — config change only
+    └── Requires: gemma4:e2b installed in Ollama (user responsibility)
+    └── Impacts: README docs, demo GIF
+
+Packaging for Multiple Install Methods
+    └── Depends on: Widget fix (correct behavior)
+    └── Depends on: Model switch (correct docs)
+    └── Requires: Oh My Zsh-compatible directory structure
+
+GitHub Polish (README, Demo GIF, LICENSE, Badges)
+    └── Depends on: All above complete
+    └── Demo GIF requires: Working plugin with correct behavior
+    └── Badges require: Tests passing (already 92% coverage)
 ```
 
 ### Dependency Notes
 
-- **Cache System requires Command Capture**: Cache key is SHA256 of command + stderr + exit code
-- **Structured Output requires LLM Integration**: Prompt engineering shapes the response format
-- **Skip-list requires Command Capture**: Need to know command and exit code to filter false positives
-- **`??` Widget requires All**: This is the user-facing entry point that orchestrates everything
+- **Widget Auto-Return requires nothing:** Pure zsh fix, no Python changes, isolated from other features.
+- **Model Switch is config-only:** Change `OLLAMA_MODEL` in `client.py` line 10. No API changes, Gemma 4 uses same chat format.
+- **Packaging enhances adoption:** Oh My Zsh users expect `plugins=(name)` to work. Without this, manual sourcing is friction.
+- **Demo GIF blocks on correct behavior:** Can't record demo until widget returns to prompt correctly.
+
+## Implementation Details
+
+### 1. Widget Auto-Return to Prompt
+
+**Current behavior:** After `??` widget displays output, user must press Enter to get clean prompt.
+
+**Expected behavior:** Widget displays output, automatically returns to clean prompt.
+
+**Implementation:**
+```zsh
+# In errormux.plugin.zsh, after errormux call:
+_errormux_explain() {
+    # ... existing code ...
+    errormux
+    
+    # NEW: Return to clean prompt automatically
+    zle reset-prompt
+}
+```
+
+**Why `zle reset-prompt`:**
+- Redraws prompt cleanly
+- Doesn't execute anything (unlike `accept-line`)
+- Standard pattern for informational widgets
+- Works with all prompt themes
+
+**Complexity:** LOW — 1 line addition
+
+**Testing:** Manual UAT: Run failing command, press `??`, verify prompt appears without Enter key.
+
+---
+
+### 2. Model Switch (gemma3:4b → gemma4:e2b)
+
+**Change location:** `src/errormux/client.py` line 10
+
+**Current:**
+```python
+OLLAMA_MODEL = "gemma3:4b"
+```
+
+**New:**
+```python
+OLLAMA_MODEL = "gemma4:e2b"
+```
+
+**Model details (from ollama.com/library/gemma4):**
+- **Name:** `gemma4:e2b`
+- **Size:** 7.2GB
+- **Context:** 128K tokens
+- **Type:** Edge device optimized (E2B = "effective 2B" parameters)
+- **Modalities:** Text, Image, Audio
+- **Benchmark:** 60% MMLU Pro, better than Gemma 3 27B for coding
+
+**Why gemma4:e2b over gemma3:4b:**
+- Newer model with better reasoning
+- Similar size (7.2GB vs 3.3GB)
+- Edge-optimized for local execution
+- Native system prompt support
+- Already available in Ollama library
+
+**Compatibility check:**
+- Same chat API (`/api/chat`)
+- Same message format (system/user roles)
+- Streaming works identically
+- No prompt changes needed
+
+**Complexity:** LOW — 1 line change
+
+**Testing:** Run tests, verify Ollama responses still parse correctly.
+
+---
+
+### 3. Multiple Install Methods
+
+#### Method A: Git Clone (existing)
+
+```bash
+git clone https://github.com/kartikparsoya-eng/ErrorMux.git ~/.shell-explainer
+cd ~/.shell-explainer
+./install.sh
+```
+
+**Changes needed:**
+- Update `install.sh` line 15: `REPO_URL="https://github.com/kartikparsoya-eng/ErrorMux.git"`
+- Current script already handles this method
+
+#### Method B: Oh My Zsh
+
+```bash
+# Clone to custom plugins directory
+git clone https://github.com/kartikparsoya-eng/ErrorMux.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/errormux
+
+# Enable in ~/.zshrc
+plugins=(... errormux)
+```
+
+**Structure requirements:**
+```
+errormux/
+├── errormux.plugin.zsh  ← OMZ looks for this exact name
+├── README.md
+├── src/
+│   └── errormux/
+├── pyproject.toml
+└── install.sh
+```
+
+**Current state:** Already has `errormux.plugin.zsh` — OMZ-compatible!
+
+**Changes needed:**
+- Document OMZ install in README
+- Add Python dep install note for OMZ users:
+  ```bash
+  cd ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/errormux
+  uv sync
+  ```
+
+#### Method C: Manual
+
+```bash
+# Download/copy files
+mkdir -p ~/.local/share/errormux
+cp errormux.plugin.zsh ~/.local/share/errormux/
+cp -r src ~/.local/share/errormux/
+
+# Source in .zshrc
+source ~/.local/share/errormux/errormux.plugin.zsh
+
+# Install deps
+cd ~/.local/share/errormux
+uv sync
+```
+
+**Complexity:** MEDIUM — README documentation updates
+
+---
+
+### 4. GitHub Repo Polish
+
+#### README Structure
+
+```markdown
+# ErrorMux
+
+One-line description.
+
+![Demo](demo.gif)
+
+## Installation
+
+### Oh My Zsh
+...
+
+### Git Clone
+...
+
+### Manual
+...
+
+## Usage
+
+...
+
+## Requirements
+
+## Configuration
+
+## License
+```
+
+#### Demo GIF
+
+**Tool options:**
+- **asciinema** — `asciinema rec demo.cast`, export to GIF with `agg`
+- **terminalizer** — `terminalizer record demo`, renders to GIF directly
+
+**Demo script:**
+1. Clear terminal
+2. Run: `ls /nonexistent` (fails)
+3. Press: `Ctrl+X ?` (triggers explanation)
+4. Show explanation output
+5. Return to clean prompt
+
+**File:** `demo.gif` in repo root
+
+**Embed:** `![ErrorMux Demo](demo.gif)`
+
+#### LICENSE File
+
+```text
+MIT License
+
+Copyright (c) 2026 Kartik Parsoya
+
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+```
+
+#### Badges
+
+```markdown
+![Coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Shell](https://img.shields.io/badge/shell-zsh-green)
+```
+
+**Complexity:** MEDIUM — Requires recording demo, writing docs
+
+---
 
 ## MVP Definition
 
-### Launch With (v1)
+### v1.1 Must Have (This Milestone)
 
-Minimum viable product — what's needed to validate the concept.
+- [ ] Widget auto-return — **1 line zsh fix**
+- [ ] Model switch to gemma4:e2b — **1 line config**
+- [ ] Oh My Zsh install docs — **README section**
+- [ ] Git clone install docs — **README section (exists, update URL)**
+- [ ] LICENSE file — **Create MIT LICENSE**
+- [ ] Demo GIF — **Record 10s demo**
+- [ ] Test badges — **Add to README header**
 
-- [x] **zsh capture layer** — Hooks stderr, exit code, and command text for every interactive command
-- [x] **`??` widget** — Reads captured data and invokes Python CLI
-- [x] **SQLite cache (7-day TTL)** — Fast response for repeated errors
-- [x] **Ollama integration** — Local gemma3:4b for WHY/FIX output
-- [x] **Skip-list** — Filters grep exit 1, test/[[, diff exit 1
-- [x] **Structured output (Rich)** — WHY (one sentence) + FIX (command)
-- [x] **Install script** — Sets up plugin, Python deps, .zshrc sourcing
+### v1.2 Consider (Future)
 
-### Add After Validation (v1.x)
+- [ ] Config file for model selection (if users request)
+- [ ] Bash support (if demand exists)
+- [ ] Auto-update mechanism
 
-Features to add once core is working.
+### Out of Scope
 
-- [ ] **Config file (~/.shell-explainer/config.toml)** — User customization
-- [ ] **Custom skip-list patterns** — User-defined false positives
-- [ ] **Cache statistics** — Show cache hit rate, size
-- [ ] **Verbose mode** — Longer explanations on demand
-- [ ] **History integration** — Recall previous explanations
-
-### Future Consideration (v2+)
-
-Features to defer until product-market fit is established.
-
-- [ ] **Multi-model support** — Switch between gemma, llama, mistral
-- [ ] **bash support** — If demand is significant
-- [ ] **Explanation history browser** — TUI for past explanations
-- [ ] **Context awareness** — Include git status, cwd context
+- Auto-explain on error (violates "on-demand" core value)
+- Cloud LLM fallback (offline-first constraint)
+- GUI/TUI (keep simple)
 
 ## Feature Prioritization Matrix
 
 | Feature | User Value | Implementation Cost | Priority |
 |---------|------------|---------------------|----------|
-| Command capture | HIGH | LOW | P1 |
-| Exit code awareness | HIGH | LOW | P1 |
-| Stderr capture | HIGH | MEDIUM | P1 |
-| `??` widget | HIGH | LOW | P1 |
-| Cache system | HIGH | MEDIUM | P1 |
-| Skip-list | HIGH | MEDIUM | P1 |
-| Local LLM | HIGH | MEDIUM | P1 |
-| Structured output | HIGH | LOW | P1 |
-| Config file | MEDIUM | LOW | P2 |
-| Custom skip-list | MEDIUM | LOW | P2 |
-| Cache stats | LOW | LOW | P3 |
-| Verbose mode | MEDIUM | LOW | P2 |
-| Multi-model | LOW | MEDIUM | P3 |
-| bash support | LOW | HIGH | P3 |
+| Widget auto-return | HIGH | LOW | P1 |
+| Model switch | HIGH | LOW | P1 |
+| LICENSE file | MEDIUM | LOW | P1 |
+| Git clone docs (update) | HIGH | LOW | P1 |
+| Oh My Zsh docs | MEDIUM | MEDIUM | P2 |
+| Demo GIF | HIGH | MEDIUM | P2 |
+| Test badges | LOW | LOW | P3 |
 
 **Priority key:**
-- P1: Must have for launch
+- P1: Must have for v1.1
 - P2: Should have, add when possible
-- P3: Nice to have, future consideration
+- P3: Nice to have, low effort
 
 ## Competitor Feature Analysis
 
-| Feature | thefuck (96.5k ⭐) | ai-shell (5.2k ⭐) | howto (104 ⭐) | ErrorMux (Our Approach) |
-|---------|-------------------|--------------------|---------------|-------------------------|
-| **Trigger** | Type `fuck` | Type `ai <prompt>` | ctrl+g | Type `??` |
-| **Approach** | Rule-based | LLM (cloud) | LLM (cloud) | LLM (local) |
-| **Offline** | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-| **Error-focused** | ⚠️ Correction only | ❌ Command generation | ❌ General help | ✅ Yes (WHY + FIX) |
-| **Explanation** | ❌ Just correction | ✅ Explains command | ⚠️ General help | ✅ WHY + FIX |
-| **Cache** | ❌ No | ❌ No | ❌ No | ✅ Yes (7-day TTL) |
-| **Skip false positives** | ❌ No | ❌ No | ❌ No | ✅ Yes |
-| **Privacy** | ✅ Local | ❌ Cloud API | ❌ Cloud API | ✅ Local |
-| **Shell support** | Multi-shell | Any | Any | zsh only |
+| Feature | thefuck | zsh-autosuggestions | ErrorMux |
+|---------|---------|---------------------|----------|
+| Trigger method | Auto on error | Auto as you type | Manual `??` |
+| Output type | Suggested command | Command completion | WHY/FIX explanation |
+| LLM powered | No | No | Yes (Ollama) |
+| Offline | Yes | Yes | Yes |
+| Configurable | Yes | Yes | No (v1.1) |
 
-## Key Insights
+**Our differentiation:** AI-powered explanations, not just suggestions. "Why did it fail?" not just "run this instead."
 
-### Table Stakes Analysis
+## Key Insights for v1.1
 
-1. **Command capture + error context** is the minimum bar. Every tool in this space captures command context. ErrorMux's approach using preexec/precmd hooks is standard.
+### Widget Auto-Return
 
-2. **Fast response** is expected. thefuck's "instant mode" shows users won't tolerate delays. ErrorMux's cache-first architecture directly addresses this.
+**Problem:** Users expect immediate prompt return after `??`. Current behavior (press Enter after output) feels like a bug.
 
-3. **Offline capability** is a gap in the market. Every LLM-based tool requires cloud APIs. This is ErrorMux's primary differentiator.
+**Solution:** `zle reset-prompt` is the standard zsh pattern for informational widgets. One-line fix with high UX impact.
 
-### Differentiator Analysis
+**Risk:** None — this is purely additive, doesn't change existing behavior.
 
-1. **Local LLM + offline-first** is unmatched. No other tool offers local LLM explanation. This is the competitive moat.
+### Model Switch
 
-2. **Cache-backed speed** is novel. Other tools re-query every time. ErrorMux's SQLite cache makes repeated errors instant.
+**Rationale:** Gemma 4 was released April 2026 with significant improvements over Gemma 3. E2B variant is edge-optimized, perfect for local CLI use.
 
-3. **Skip-list for false positives** is unique. thefuck has no filtering, making it noisy for grep/diff/test failures.
+**Compatibility:** Verified same API, same message format. No prompt changes needed.
 
-### Anti-Feature Rationale
+**Migration:** Users must run `ollama pull gemma4:e2b` before upgrading. Document in README.
 
-1. **Auto-print on every error** was explicitly rejected in PROJECT.md. On-demand (`??`) is the right choice — see thefuck's user feedback about noise.
+### Packaging
 
-2. **Cloud fallback** undermines the privacy/offline value proposition. Users who want cloud can use ai-shell or howto.
+**Oh My Zsh compatibility:** Project already has correct file naming (`errormux.plugin.zsh`). OMZ expects `{name}.plugin.zsh` and we have it.
 
-3. **Command execution** is dangerous. thefuck's confirmation step shows users want control. Show the fix, don't run it.
+**Installation friction:** Three methods covers 95% of users:
+- OMZ users (most zsh users use OMZ)
+- Git clone + install.sh (scripted, handles deps)
+- Manual (power users, air-gapped systems)
+
+### GitHub Polish
+
+**Demo GIF impact:** Visual demonstration reduces bounce rate. Users want to see what they're installing.
+
+**LICENSE necessity:** Without LICENSE, GitHub shows "No license" warning. MIT is standard for dev tools.
+
+**Badge value:** Coverage badge signals quality. 92% coverage differentiates from "quick hack" plugins.
 
 ## Sources
 
-- thefuck: https://github.com/nvbn/thefuck (96.5k stars) — Rule-based correction
-- ai-shell: https://github.com/BuilderIO/ai-shell (5.2k stars) — LLM command generation
-- howto: https://github.com/antonmedv/howto (104 stars) — LLM terminal helper
-- shellcheck: https://github.com/koalaman/shellcheck (39.3k stars) — Static analysis
-- atuin: https://github.com/atuinsh/atuin (29.2k stars) — Shell history
-- explainshell: https://explainshell.com — Web-based command explanation
-- Warp: https://www.warp.dev — Modern terminal with AI
+- [Ollama gemma4 library page](https://ollama.com/library/gemma4) — Model specs, benchmarks (HIGH confidence)
+- [Oh My Zsh Plugins Wiki](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) — Plugin structure conventions (HIGH confidence)
+- [Zsh ZLE Documentation](https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html) — Widget behavior (HIGH confidence)
+- Existing codebase: `errormux.plugin.zsh`, `client.py`, `cli.py` — Current implementation (HIGH confidence)
+- Local `ollama list` output — Installed models verification (HIGH confidence)
+- [thefuck](https://github.com/nvbn/thefuck) — Competitor analysis (HIGH confidence)
+- [ai-shell](https://github.com/BuilderIO/ai-shell) — Competitor analysis (HIGH confidence)
 
 ---
-*Feature research for: Shell error explanation tools*
-*Researched: 2026-04-15*
+*Feature research for: ErrorMux v1.1 Polish & Package*
+*Researched: 2026-04-16*
+*Previous version: v1.0 feature landscape (archived)*

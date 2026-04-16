@@ -1,185 +1,293 @@
 # Stack Research
 
-**Domain:** zsh plugin with Python CLI backend + Ollama local LLM integration
-**Researched:** 2026-04-15
+**Project:** ErrorMux v1.1 Polish & Package
+**Milestone:** Subsequent — Adding fixes and improvements to existing zsh plugin
+**Researched:** 2026-04-16
 **Confidence:** HIGH
 
-## Recommended Stack
+---
 
-### Core Technologies
+## Executive Summary
 
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| Python | 3.12+ | Runtime | Modern async support, performance improvements, standard for CLI tools. 3.12 has significant optimizations over 3.11. |
-| uv | 0.5+ | Package manager | 10-100x faster than pip. Replaces pip, pip-tools, pipx, poetry, pyenv, virtualenv. Single tool for dependency management, virtual environments, and Python version management. Written in Rust, actively maintained by Astral (Ruff creators). |
-| ollama | 0.6.1 | Ollama Python SDK | Official Python client for Ollama. Wraps httpx internally with proper error handling, streaming support, and typed responses. Simpler than raw httpx calls. Supports both sync and async clients. |
-| typer | 0.15+ | CLI framework | "FastAPI of CLIs" - built on Click with type hints for automatic help generation, shell completion, and Rich integration. Minimal boilerplate (2 lines for simplest CLI). Excellent editor support. |
-| rich | 14.0+ | Terminal output | Beautiful terminal formatting, progress bars, live displays, and syntax highlighting. Integrated with Typer for automatic error formatting. Industry standard for Python CLI output. |
-| SQLite | (stdlib) | Cache storage | Zero-config, single-file database, included in Python stdlib. Fast for key-value lookups with SHA256 cache keys. 7-day TTL is trivial to implement. |
+This is a **subsequent milestone** for an existing, validated zsh plugin. No new core Python dependencies are needed. The changes are primarily:
 
-### Supporting Libraries
+1. **Pure zsh fix** for widget auto-return (no dependencies)
+2. **Configuration change** to switch model name (no library changes)
+3. **Packaging structure** for Oh My Zsh compatibility (directory conventions)
+4. **Repo polish** using standard tools (GitHub Actions, shields.io, VHS)
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| httpx | 0.28+ | HTTP client (fallback) | If you need direct HTTP control outside ollama SDK. The ollama library uses httpx internally, so it's already a dependency. |
-| pytest | 8.0+ | Testing framework | For test suite covering cache, skip-list, and prompt construction. |
-| pytest-asyncio | 0.24+ | Async test support | If using async client for concurrent requests. |
+---
 
-### Shell Integration
+## Existing Stack (Validated, No Changes Needed)
+
+| Technology | Version | Purpose | Status |
+|------------|---------|---------|--------|
+| Python | 3.12+ | Runtime | ✓ Unchanged |
+| uv | 0.5+ | Package manager | ✓ Unchanged |
+| ollama SDK | 0.6.1+ | Ollama Python SDK | ✓ Unchanged |
+| typer | 0.15+ | CLI framework | ✓ Unchanged |
+| rich | 14.0+ | Terminal output | ✓ Unchanged |
+| SQLite | (stdlib) | Cache storage | ✓ Unchanged |
+| pytest | 8.0+ | Testing | ✓ Unchanged |
+| pytest-cov | 5.0+ | Coverage reporting | ✓ Unchanged |
+
+**Current test coverage:** 92% (63 tests passing)
+
+---
+
+## NEW: Stack Additions for v1.1
+
+### 1. Widget Exit Fix (Pure Zsh)
+
+**No dependencies needed.** This is a zle (zsh line editor) fix using built-in commands.
 
 | Component | Purpose | Notes |
 |-----------|---------|-------|
-| preexec hook | Captures command before execution | Stores command text in global variable |
-| precmd hook | Captures exit code and stderr after execution | Stores exit status, triggers on next prompt |
-| zle widget (`??`) | User-triggered explanation | Binds to key sequence, calls Python CLI |
+| `zle reset-prompt` | Redraw prompt after widget | Built-in zsh command |
+| `zle accept-line` | Accept empty line (optional) | Built-in zsh command |
 
-### Development Tools
-
-| Tool | Purpose | Notes |
-|------|---------|-------|
-| uv | Dependency management | Replaces pip/poetry. Use `uv add`, `uv sync`, `uv run` |
-| ruff | Linting/formatting | Fast, comprehensive. Optional but recommended |
-| pytest | Test runner | `uv run pytest` |
-
-## Installation
-
-```bash
-# Initialize project with uv
-uv init errormux
-cd errormux
-
-# Add dependencies
-uv add ollama typer rich
-
-# Add dev dependencies
-uv add --dev pytest pytest-asyncio
-
-# Run the CLI
-uv run errormux --help
-```
-
-### Zsh Plugin Installation
-
+**Fix Pattern:**
 ```zsh
-# In ~/.zshrc
-source ~/.zsh/plugins/errormux/errormux.plugin.zsh
+_errormux_explain() {
+    # ... existing logic ...
+    errormux
+    zle reset-prompt  # Add this line - redraws prompt after output
+}
 ```
 
-## Alternatives Considered
+### 2. Model Switch: gemma3:4b → gemma4:e2b
 
-| Recommended | Alternative | When to Use Alternative |
-|-------------|-------------|-------------------------|
-| ollama SDK | httpx direct | If you need fine-grained HTTP control, custom timeouts per request, or non-standard endpoints. The ollama SDK exposes httpx Client kwargs, so customization is possible. |
-| ollama SDK | requests | Legacy projects only. httpx is the modern standard - requests doesn't support async or HTTP/2. |
-| uv | poetry | If your team is already invested in poetry. But uv is faster and simpler. |
-| typer | click directly | If you need Click's lower-level control. Typer is Click + type hints + Rich. |
-| typer | argparse | Only for stdlib-only constraint. Typer is worth the dependency. |
-| SQLite | Redis | Only if you need distributed caching or TTL precision < 1 second. Overkill for single-user local tool. |
+**No library changes needed.** Just update the constant in `client.py`.
 
-## What NOT to Use
+| Aspect | Before (gemma3:4b) | After (gemma4:e2b) |
+|--------|--------------------|--------------------|
+| Model size | ~4GB | 7.2GB |
+| Context window | 8K tokens | 128K tokens |
+| Modalities | Text | Text, Image, Audio |
+| Benchmark (LiveCodeBench v6) | 29.1% | 44.0% |
 
-| Avoid | Why | Use Instead |
-|-------|-----|-------------|
-| requests library | Synchronous only, no HTTP/2, no streaming support, being superseded by httpx | httpx or ollama SDK |
-| poetry | 10-100x slower than uv, more complex configuration | uv |
-| pip + virtualenv | Manual management, slower dependency resolution | uv |
-| argparse | Verbose, no automatic help generation, no shell completion | typer |
-| Global Python packages | Pollutes system, version conflicts | uv project environments |
-| Redis/external DB | Unnecessary complexity for single-user local cache | SQLite |
-| Subprocess calls to ollama CLI | Slower, no streaming, fragile parsing | ollama Python SDK |
+**Change Required:**
+```python
+# In src/errormux/client.py, line 10
+OLLAMA_MODEL = "gemma4:e2b"  # Changed from gemma3:4b
+```
 
-## Stack Patterns by Variant
+**Verification:** gemma4:e2b confirmed available at ollama.com/library/gemma4 (HIGH confidence, verified 2026-04-16)
 
-**If streaming is critical:**
-- Use `ollama.chat()` with `stream=True`
-- Iterate over chunks, print incrementally
-- Rich Live for animated output
+### 3. Demo GIF Recording
 
-**If timeout is strict (10s):**
-- ollama SDK supports timeout via httpx kwargs: `Client(timeout=10.0)`
-- Handle `httpx.TimeoutException` gracefully
+| Tool | Version | Purpose | When to Use |
+|------|---------|---------|-------------|
+| **VHS** | 0.11.0+ | Terminal GIF recording | Primary choice for demos |
+| asciinema | 2.x | Terminal recording (web embed) | Alternative if no GIF needed |
 
-**If offline-first is required:**
-- Check ollama service availability before requests
-- Cache should handle fallback gracefully
-- ollama SDK raises `ResponseError` on connection failure
+**VHS Installation:**
+```bash
+# macOS
+brew install vhs
+
+# Requires dependencies
+brew install ttyd ffmpeg
+```
+
+**VHS tape file pattern:**
+```tape
+# demo.tape
+Output demo.gif
+Set FontSize 18
+Set Width 800
+Set Height 400
+Set Shell "zsh"
+
+Type "ls /nonexistent"
+Enter
+Sleep 1s
+Type "??"
+Sleep 2s
+```
+
+### 4. GitHub Actions CI
+
+| Action | Version | Purpose |
+|--------|---------|---------|
+| `actions/checkout` | v6 | Clone repository |
+| `actions/setup-python` | v6 | Install Python |
+| `astral-sh/setup-uv` | v5 | Install uv package manager |
+
+**Workflow file (`.github/workflows/ci.yml`):**
+```yaml
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --group dev
+      - run: uv run pytest
+```
+
+### 5. README Badges
+
+| Badge | Source | URL Pattern |
+|-------|--------|-------------|
+| Test status | GitHub Actions | `https://github.com/{owner}/{repo}/actions/workflows/ci.yml/badge.svg` |
+| Coverage | shields.io (static) | `https://img.shields.io/badge/coverage-92%25-green` |
+| License | shields.io | `https://img.shields.io/badge/license-MIT-blue.svg` |
+| Python version | shields.io | `https://img.shields.io/badge/python-3.12+-blue.svg` |
+
+**Badge Markdown:**
+```markdown
+[![Tests](https://github.com/kartikparsoya-eng/ErrorMux/actions/workflows/ci.yml/badge.svg)](https://github.com/kartikparsoya-eng/ErrorMux/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-92%25-green)](tests/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+```
+
+### 6. LICENSE File
+
+| License | Why | Notes |
+|---------|-----|-------|
+| **MIT** | Most permissive, widely used, matches typical CLI tools | Standard for open source developer tools |
+
+**No dependencies** — just create `LICENSE` file with MIT text.
+
+---
+
+## Oh My Zsh Plugin Structure
+
+| File | Purpose | Required |
+|------|---------|----------|
+| `errormux.plugin.zsh` | Main plugin file | ✓ Required |
+| `_errormux` | Completion definitions | Optional |
+| `README.md` | Plugin documentation | Recommended |
+
+**Oh My Zsh installation pattern:**
+```bash
+# User clones to custom plugins directory
+git clone https://github.com/kartikparsoya-eng/ErrorMux.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/errormux
+
+# User adds to .zshrc plugins array
+plugins=(... errormux)
+```
+
+**Current file already named correctly:** `errormux.plugin.zsh` ✓
+
+---
+
+## What NOT to Add
+
+| Avoid | Why | Instead |
+|-------|-----|---------|
+| `requests` library | Already using httpx via ollama SDK | Keep ollama SDK |
+| New Python dependencies | Increases install complexity, contradicts "minimal" constraint | Stay minimal |
+| Complex CI matrix (multiple OS/Python) | Overkill for single-user local plugin | Simple `uv run pytest` |
+| Homebrew formula | Premature for v1.1, adds maintenance burden | Manual/git install for now |
+| PyPI package | This is a zsh plugin, not a Python library | Keep as source install |
+| codecov.io integration | Overkill for small project | Use shields.io static badge with current 92% |
+
+---
+
+## Installation Commands
+
+### For Development (existing, unchanged)
+```bash
+uv sync --group dev
+uv run pytest
+```
+
+### For VHS (demo recording)
+```bash
+brew install vhs ttyd ffmpeg
+vhs demo.tape
+```
+
+### For Oh My Zsh users (new)
+```bash
+git clone https://github.com/kartikparsoya-eng/ErrorMux.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/errormux
+# Add 'errormux' to plugins array in ~/.zshrc, then restart shell
+```
+
+### For manual install (existing, unchanged)
+```bash
+git clone https://github.com/kartikparsoya-eng/ErrorMux.git
+cd ErrorMux
+./install.sh
+```
+
+---
 
 ## Version Compatibility
 
-| Package A | Compatible With | Notes |
-|-----------|-----------------|-------|
-| ollama 0.6.1 | httpx 0.27+ | ollama depends on httpx internally |
-| typer 0.15+ | rich 13+ | typer bundles rich for error formatting |
-| Python 3.12+ | uv 0.5+ | uv manages Python versions too |
-| uv 0.5+ | all above | uv handles dependency resolution |
+| Component A | Compatible With | Notes |
+|-------------|-----------------|-------|
+| gemma4:e2b | ollama SDK 0.6.1+ | Same API, just model name change |
+| setup-python@v6 | GitHub Actions runner v2.327.1+ | Node 24 based |
+| VHS 0.11+ | macOS 12+, Linux | Requires ttyd + ffmpeg |
+| uv 0.5+ | Python 3.12+ | Already in use |
+| typer 0.15+ | rich 14.0+ | Already in use |
 
-## Key Architecture Decisions
+---
 
-### Ollama SDK vs Raw httpx
+## Integration Points
 
-**Recommendation: Use ollama SDK**
+### Widget → CLI (unchanged)
+- Widget calls `errormux` CLI command
+- CLI reads `/tmp/shell-explainer-*` files
+- CLI calls Ollama, displays output via Rich
 
-```python
-# Recommended (cleaner)
-from ollama import Client
-client = Client(host='http://localhost:11434', timeout=10.0)
-response = client.chat(model='gemma3:4b', messages=[...])
+### Widget Auto-Return (NEW - pure zsh)
+- Add `zle reset-prompt` at end of `_errormux_explain()` function
+- No changes to CLI or Python code required
+- This redraws the prompt immediately after output
 
-# Alternative (direct httpx - more control but more code)
-import httpx
-client = httpx.Client(base_url='http://localhost:11434', timeout=10.0)
-response = client.post('/api/chat', json={...})
-```
+### Model Switch (NEW - config only)
+- Single line change in `src/errormux/client.py`: `OLLAMA_MODEL = "gemma4:e2b"`
+- All existing tests still pass (model name is not part of test contracts)
+- User must run `ollama pull gemma4:e2b` before first use
 
-The ollama SDK provides:
-- Typed responses (ChatResponse with `.message.content`)
-- Built-in error handling (`ResponseError` with status codes)
-- Streaming support via generator
-- Async client option
-- Passes extra kwargs to httpx for customization
+---
 
-### Zsh Hook Pattern
+## Alternatives Considered for Demo Recording
 
-```zsh
-# Capture pattern (standard approach)
-_ERRORMUX_CMD=""
-_ERRORMUX_STDERR=""
+| Tool | Pros | Cons | Decision |
+|------|------|------|----------|
+| **VHS** | Declarative `.tape` files, reproducible, CI-friendly | Requires ttyd + ffmpeg | ✓ Recommended |
+| asciinema | Simple recording, web embeds | No GIF output, requires asciinema.org account | Alternative |
+| terminalizer | Node-based, configurable GIF output | Slower, requires Node.js | Not recommended |
+| ttygif | Direct terminal → GIF | Manual recording, no scripting | Not recommended |
 
-_errormux_preexec() {
-    _ERRORMUX_CMD="$1"
-}
-
-_errormux_precmd() {
-    local exit_code=$?
-    # Store exit code, stderr captured separately
-}
-
-preexec_functions+=(_errormux_preexec)
-precmd_functions+=(_errormux_precmd)
-```
-
-### Cache Key Strategy
-
-```python
-import hashlib
-
-def cache_key(command: str, exit_code: int, stderr: str) -> str:
-    """SHA256 hash for deterministic cache keys"""
-    data = f"{command}|{exit_code}|{stderr}"
-    return hashlib.sha256(data.encode()).hexdigest()
-```
+---
 
 ## Sources
 
-- [uv docs](https://docs.astral.sh/uv/) — Package manager, verified Apr 2026 (HIGH confidence)
-- [ollama-python GitHub](https://github.com/ollama/ollama-python) — Official SDK, verified Apr 2026 (HIGH confidence)
-- [ollama PyPI](https://pypi.org/project/ollama/) — Version 0.6.1, Nov 2025 (HIGH confidence)
-- [httpx docs](https://www.python-httpx.org/) — HTTP client, verified Apr 2026 (HIGH confidence)
-- [httpx PyPI](https://pypi.org/project/httpx/) — Version 0.28.1, Dec 2024 (HIGH confidence)
-- [typer docs](https://typer.tiangolo.com/) — CLI framework, verified Apr 2026 (HIGH confidence)
-- [rich docs](https://rich.readthedocs.io/) — Terminal output, verified Apr 2026 (HIGH confidence)
-- [Ollama API docs](https://github.com/ollama/ollama/blob/main/docs/api.md) — REST API reference (HIGH confidence)
+- [ollama.com/library/gemma4](https://ollama.com/library/gemma4) — gemma4:e2b model details (HIGH confidence, verified 2026-04-16)
+- [github.com/charmbracelet/vhs](https://github.com/charmbracelet/vhs) — Terminal GIF recorder (HIGH confidence)
+- [github.com/actions/setup-python](https://github.com/actions/setup-python) — CI action v6 (HIGH confidence)
+- [github.com/ohmyzsh/ohmyzsh/wiki/Plugins](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins) — Plugin structure (HIGH confidence)
+- [shields.io](https://shields.io) — Badge service (HIGH confidence)
+- [Oh My Zsh git.plugin.zsh](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/git/git.plugin.zsh) — Plugin file structure example (HIGH confidence)
 
 ---
-*Stack research for: ErrorMux zsh plugin + Python CLI + Ollama*
-*Researched: 2026-04-15*
+
+## Summary: No New Python Dependencies Required
+
+The v1.1 milestone is purely about:
+1. **Fixing zsh behavior** — built-in `zle reset-prompt`
+2. **Changing config** — update model name constant
+3. **Packaging structure** — already correct file naming
+4. **Repo polish** — GitHub Actions (not a Python dep), shields.io (external service), VHS (dev tool only)
+
+The stack remains minimal: Python 3.12, uv, ollama SDK, typer, rich, SQLite — exactly as validated in v1.0.
+
+---
+
+*Stack research for: ErrorMux v1.1 Polish & Package*
+*Researched: 2026-04-16*

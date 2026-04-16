@@ -3,15 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Package
 status: planning
-stopped_at: —
-last_updated: "2026-04-16T08:00:00.000Z"
-last_activity: 2026-04-16
+last_updated: "2026-04-16T07:10:27.031Z"
+last_activity: 2026-04-16 — Roadmap created for v1.1
 progress:
   total_phases: 4
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 2
+  completed_plans: 2
+  percent: 100
 ---
 
 # Project State
@@ -52,6 +51,7 @@ Progress: [░░░░░░░░░░] 0%
 | 6. Testing | 2 | Complete |
 
 **Recent Trend:**
+
 - v1.0 shipped successfully
 - New milestone v1.1 started
 
@@ -62,9 +62,12 @@ Progress: [░░░░░░░░░░] 0%
 All decisions logged in PROJECT.md Key Decisions table.
 
 Recent decisions affecting current work:
+
 - Widget fix must use `zle reset-prompt` + `zle -R` pattern (standard zsh ZLE)
 - Cache key must include model name to prevent stale explanations
 - File naming `errormux.plugin.zsh` already satisfies Oh My Zsh convention
+- [Phase 7]: WUX-01 verified: prompt auto-returns after explanation without Enter
+- [Phase 7]: WUX-02 verified: widget exits cleanly, no manual keypress needed
 
 ### Pending Todos
 

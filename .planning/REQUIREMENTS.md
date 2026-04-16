@@ -9,8 +9,8 @@ Requirements for polish & packaging milestone.
 
 ### Widget UX
 
-- [ ] **WUX-01**: User's shell prompt auto-returns after `??` output displays
-- [ ] **WUX-02**: Widget exits cleanly without requiring manual keypress (Ctrl+X)
+- [x] **WUX-01**: User's shell prompt auto-returns after `??` output displays
+- [x] **WUX-02**: Widget exits cleanly without requiring manual keypress (Ctrl+X)
 
 ### Model Configuration
 
@@ -70,8 +70,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WUX-01 | Phase 7 | Pending |
-| WUX-02 | Phase 7 | Pending |
+| WUX-01 | Phase 7 | Complete |
+| WUX-02 | Phase 7 | Complete |
 | MODL-01 | Phase 8 | Pending |
 | MODL-02 | Phase 8 | Pending |
 | MODL-03 | Phase 8 | Pending |

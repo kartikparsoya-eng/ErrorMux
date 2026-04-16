@@ -106,6 +106,9 @@ def test_cli_cache_hit(monkeypatch, tmp_path, capsys):
     monkeypatch.setattr("errormux.cache.CACHE_DIR", cache_dir)
     monkeypatch.setattr("errormux.cache.CACHE_DB", cache_db)
 
+    # Mock config to use consistent model name
+    monkeypatch.setattr("errormux.cli.get_model_name", lambda: "gemma4:e2b")
+
     cmd_file = tmp_path / "cmd"
     stderr_file = tmp_path / "stderr"
     exit_file = tmp_path / "exit"

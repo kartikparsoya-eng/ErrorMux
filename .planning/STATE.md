@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Polish & Package
-status: executing
-last_updated: "2026-04-16T08:00:00.000Z"
+status: complete
+last_updated: "2026-04-16T15:31:00.000Z"
 last_activity: 2026-04-16
 progress:
   total_phases: 4
-  completed_phases: 3
-  total_plans: 10
-  completed_plans: 10
+  completed_phases: 4
+  total_plans: 13
+  completed_plans: 13
   percent: 100
 ---
 
@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** Fast, local, on-demand error explanations that don't interrupt your flow — only when you ask for them.
-**Current focus:** Phase 9 (Packaging) — Complete
+**Current focus:** v1.1 Released — Phase 10 complete
 
 ## Current Position
 
-Phase: 9 of 10 (Packaging)
-Plan: 3 of 3 in current phase
-Status: Phase complete — ready for next phase
+Phase: 10 of 10 (GitHub Polish)
+Plan: 4 of 4 in current phase
+Status: **MILESTONE COMPLETE** — v1.1.0 released
 Last activity: 2026-04-16
 
 Progress: [██████████] 100%
@@ -35,8 +35,8 @@ Progress: [██████████] 100%
 
 **Velocity:**
 
-- Total plans completed: 17 (12 v1.0 + 5 v1.1)
-- Total phases completed: 8 (6 v1.0 + 2 v1.1)
+- Total plans completed: 20 (12 v1.0 + 8 v1.1)
+- Total phases completed: 9 (6 v1.0 + 3 v1.1)
 - Test coverage: 89%
 
 **By Phase (v1.0):**
@@ -54,13 +54,15 @@ Progress: [██████████] 100%
 
 | Phase | Plans | Status |
 |-------|-------|--------|
+| 7. Widget Auto-Return Fix | 1 | Complete |
 | 8. Model Switch | 2 | Complete |
 | 9. Packaging | 3 | Complete |
+| 10. GitHub Polish | 4 | Complete |
 
 **Recent Trend:**
 
 - v1.0 shipped successfully
-- v1.1 in progress - Phase 9 complete
+- v1.1 shipped successfully — Released 2026-04-16
 
 ## Accumulated Context
 
@@ -81,6 +83,10 @@ Recent decisions affecting current work:
 - [Phase 9]: install.sh detects Oh My Zsh via $ZSH_CUSTOM and fallback paths
 - [Phase 9]: Do not auto-modify .zshrc plugins array - print instructions instead
 - [Phase 9]: uninstall.sh detects install location and prints cleanup instructions
+- [Phase 10]: MIT License with year 2026, holder kartikparsoya-eng
+- [Phase 10]: shields.io badges for License and Test Coverage
+- [Phase 10]: Demo GIF deferred - DEMO-RECORDING.md created for future use
+- [Phase 10]: Released as v1.1.0 on GitHub
 
 ### Pending Todos
 
@@ -92,14 +98,18 @@ None.
 
 ## Session Continuity
 
-Phase 9: Packaging completed on 2026-04-16.
+Phase 10: GitHub Polish completed on 2026-04-16.
 
-- install.sh updated with Oh My Zsh detection ($ZSH_CUSTOM + fallback)
-- uninstall.sh created for clean removal with confirmation
-- README.md updated with three installation methods documented
+- LICENSE file created (MIT, 2026, kartikparsoya-eng)
+- README.md updated with shields.io badges
+- DEMO-RECORDING.md created (demo GIF deferred)
+- Pushed to GitHub: github.com/kartikparsoya-eng/ErrorMux
+- Tag v1.1.0 created and pushed
+- GitHub Release published
 
-Next action: `/gsd-execute-phase 10` or `/gsd-plan-phase 10`
+**GitHub Release URL:** https://github.com/kartikparsoya-eng/ErrorMux/releases/tag/v1.1.0
 
 ---
+
 *State initialized: 2026-04-15*
-*Last updated: 2026-04-16 after Phase 9 completion*
+*Last updated: 2026-04-16 after Phase 10 completion — v1.1.0 Released*

@@ -111,6 +111,5 @@ precmd_functions+=(_errormux_precmd)
 # Create zle widget
 zle -N errormux-explain _errormux_explain
 
-# Bind to Ctrl+X ? to avoid glob conflicts
-# Usage: Press Ctrl+X then ?
-bindkey '^X?' errormux-explain
+# Bind to Alt+E (Option+E on macOS)
+bindkey '\ee' errormux-explain

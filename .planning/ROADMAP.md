@@ -60,7 +60,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Plugin calls gemma4:e2b model via Ollama for all explanations
   2. Cache keys include model name to prevent stale explanations after model switch
   3. Config file documents model requirement so users know to pull gemma4:e2b
-**Plans**: TBD
+**Plans**: 2 plans
+- [x] 08-01-PLAN.md — Model constant and cache key update
+- [x] 08-02-PLAN.md — Config file and model error handling
 
 ### Phase 9: Packaging
 **Goal**: Users can install via multiple documented methods
@@ -101,7 +103,7 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 | 5. Installation | v1.0 | 2/2 | Complete | 2026-04-15 |
 | 6. Testing | v1.0 | 2/2 | Complete | 2026-04-16 |
 | 7. Widget Auto-Return Fix | v1.1 | 0/2 | Not started | - |
-| 8. Model Switch | v1.1 | 0/TBD | Not started | - |
+| 8. Model Switch | v1.1 | 2/2 | Complete | 2026-04-16 |
 | 9. Packaging | v1.1 | 0/TBD | Not started | - |
 | 10. GitHub Polish | v1.1 | 0/TBD | Not started | - |
 

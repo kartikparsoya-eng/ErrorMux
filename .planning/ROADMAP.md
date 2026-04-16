@@ -48,7 +48,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. User can press ?? and see output without needing to press Enter afterward
   2. Prompt returns to ready state automatically after output displays
   3. Widget exits cleanly without requiring Ctrl+C or manual intervention
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 07-01-PLAN.md — Widget ZLE reset implementation
+- [ ] 07-02-PLAN.md — Interactive UX verification
 
 ### Phase 8: Model Switch
 **Goal**: Plugin uses gemma4:e2b model with proper cache handling
@@ -98,7 +100,7 @@ Phases execute in numeric order: 7 → 8 → 9 → 10
 | 4. Skip-List Filtering | v1.0 | 2/2 | Complete | 2026-04-15 |
 | 5. Installation | v1.0 | 2/2 | Complete | 2026-04-15 |
 | 6. Testing | v1.0 | 2/2 | Complete | 2026-04-16 |
-| 7. Widget Auto-Return Fix | v1.1 | 0/TBD | Not started | - |
+| 7. Widget Auto-Return Fix | v1.1 | 0/2 | Not started | - |
 | 8. Model Switch | v1.1 | 0/TBD | Not started | - |
 | 9. Packaging | v1.1 | 0/TBD | Not started | - |
 | 10. GitHub Polish | v1.1 | 0/TBD | Not started | - |
